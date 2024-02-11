@@ -139,6 +139,40 @@ p {
   --bs-gradient: none;
 }
 
+.btn-dark {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #08b2ee;
+  --bs-btn-border-color: #06b0f3;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #056286;
+  --bs-btn-hover-border-color: #056286;
+  --bs-btn-focus-shadow-rgb: 66, 70, 73;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #06b0f3;
+  --bs-btn-active-border-color: #06b0f3;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #056286;
+  --bs-btn-disabled-border-color: #056286;
+}
+
+.btn-secondary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #86b905;
+  --bs-btn-border-color: #86b905;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #506e02;
+  --bs-btn-hover-border-color: #506e02;
+  --bs-btn-focus-shadow-rgb: 130, 138, 145;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #506e02;
+  --bs-btn-active-border-color: #506e02;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #506e02;
+  --bs-btn-disabled-border-color: #506e02;
+}
+
 /* Button END */
 
 /* Sidebar START */
@@ -240,4 +274,12 @@ p {
 
 .bg-blue {
   background: #00b0ee;
+}
+
+.text-capital {
+  text-transform: capitalize;
+}
+
+.logo {
+  width: 30% !important;
 }
