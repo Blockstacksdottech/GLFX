@@ -1,4 +1,11 @@
+import Checker from "@/components/Checker";
+import { UserContext } from "@/contexts/UserContext";
+import { logout } from "@/helpers/helpers";
+import { useContext } from "react";
+
 export default function Navbar() {
+  const [User, setUser] = useContext(UserContext);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg sticky-top bg-light">
@@ -39,7 +46,10 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-danger" href="/login">
+                <a
+                  className="nav-link text-danger"
+                  onClick={() => logout(setUser)}
+                >
                   <i class="bi bi-door-closed"></i> Logout
                 </a>
               </li>

@@ -1,8 +1,39 @@
 import Head from "next/head";
 import Navbar from "../component/navbar";
 import Sidebar from "../component/sidebar";
+import { useContext, useState } from "react";
+import { UserContext } from "@/contexts/UserContext";
+import { postReq } from "@/helpers/helpers";
+import { toast } from "react-toastify";
 
 export default function Security() {
+  const [User, setUser] = useContext(UserContext);
+
+  const [body, setBody] = useState({
+    old_pass: "",
+    new_pass: "",
+    confirm_pass: "",
+  });
+
+  const updatePassword = async () => {
+    const resp = await postReq("security", body);
+    if (!resp.failed) {
+      toast.success("Password updated successfully");
+    } else {
+      if (resp.message) {
+        toast.error(resp.message);
+      } else {
+        toast.error("Failed updating password");
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    let temp = { ...body };
+    temp[e.target.name] = e.target.value;
+    setBody(temp);
+  };
+
   return (
     <>
       <Head>
@@ -30,29 +61,43 @@ export default function Security() {
                       <div className="mb-3">
                         <label className="mb-2">Current Password</label>
                         <input
-                          type="text"
+                          type="password"
                           className="form-control"
                           placeholder="Enter your current password"
+                          name="old_pass"
+                          value={body.old_pass}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">
                         <label className="mb-2">New Password</label>
                         <input
-                          type="text"
+                          type="password"
                           className="form-control"
                           placeholder="Enter your new password"
+                          name="new_pass"
+                          value={body.new_pass}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">
                         <label className="mb-2">Confirm Password</label>
                         <input
-                          type="text"
+                          type="password"
                           className="form-control"
                           placeholder="Please confirm your new password"
+                          name="confirm_pass"
+                          value={body.confirm_pass}
+                          onChange={handleChange}
                         />
                       </div>
                       <div className="clearfix">
-                        <a className="btn btn-primary float-end">Update</a>
+                        <a
+                          className="btn btn-primary float-end"
+                          onClick={updatePassword}
+                        >
+                          Update
+                        </a>
                       </div>
                     </form>
                   </div>

@@ -1,5 +1,13 @@
 from .models import (
-    CustomUser
+    CustomUser,
+    PersonalInfo,
+    FinancialInfo,
+    Wallet,
+    Transaction,
+    Documents,
+    Account,
+    Ticket,
+    Messages
 )
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -107,7 +115,7 @@ class RegisterSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'password', 'username',
-                  'name', 'surname', 'company_name', 'phone']
+                  'name', 'surname', 'company_name', 'phone', 'joined']
         extra_kwargs = {'password': {'write_only': True, 'required': False}}
 
     def create(self, validated, *args, **kwargs):
@@ -115,3 +123,64 @@ class RegisterSerializer(ModelSerializer):
         u.set_password(validated['password'])
         u.save()
         return RegisterSerializer(u).data
+
+
+class PersonalInfoSerializer(ModelSerializer):
+    class Meta:
+        model = PersonalInfo
+        fields = "__all__"
+
+
+class FinancialInfoSerializer(ModelSerializer):
+    class Meta:
+        model = FinancialInfo
+        fields = "__all__"
+
+
+class WalletSerializer(ModelSerializer):
+    class Meta:
+        model = Wallet
+        fields = "__all__"
+
+
+class TransactionSerializer(ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = "__all__"
+
+
+class DocumentsSerializer(ModelSerializer):
+    class Meta:
+        model = Documents
+        fields = "__all__"
+
+
+class AccountSerializer(ModelSerializer):
+    class Meta:
+        model = Account
+        fields = "__all__"
+
+
+class TicketSerializer(ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = "__all__"
+
+
+class MessagesSerializer(ModelSerializer):
+    class Meta:
+        model = Messages
+        fields = "__all__"
+
+
+class TicketWithMessagesSerializer(ModelSerializer):
+
+    messages = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Ticket
+        fields = "__all__"
+
+    def get_messages(self, instance):
+        messages = Messages.objects.filter(ticket=instance).order_by("date")
+        return MessagesSerializer(messages, many=True).data
