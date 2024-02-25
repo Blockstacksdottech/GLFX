@@ -74,6 +74,7 @@ export default function Personaldetails() {
     const resp = await postReq("personalinfo", info);
     if (resp) {
       await fetchInfo();
+      toast.success("Updated");
     } else {
       toast.error("failed Updating Info");
     }

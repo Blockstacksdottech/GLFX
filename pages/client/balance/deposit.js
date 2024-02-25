@@ -96,6 +96,7 @@ export default function Deposit() {
       const resp = await handleSingleFileSubmit(photo, "management", body);
       if (resp) {
         toast.success("Request Created");
+        loadData();
       } else {
         toast.error("Failed submiting the request");
       }

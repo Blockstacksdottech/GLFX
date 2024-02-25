@@ -4,7 +4,12 @@ import Sidebar from "../component/sidebar";
 import Checker from "@/components/Checker";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
-import { convertFromUSD, req } from "@/helpers/helpers";
+import {
+  convertFromUSD,
+  formatDate,
+  getBadgeClass,
+  req,
+} from "@/helpers/helpers";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -13,10 +18,23 @@ export default function Mywallet() {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState();
   const [rates, setRates] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+
+  const loadTransactions = async () => {
+    const resp = await req("transactions");
+    if (resp) {
+      console.log(resp);
+      setTransactions(resp);
+    } else {
+      toast.error("Failed Fetching transactions");
+    }
+  };
 
   const fetchRates = async () => {
     const resp = await axios.get("/api/rates");
+    console.log("inside rates");
     if (resp.status === 200) {
+      console.log(resp);
       const res = await resp.data;
       setRates(res);
     }
@@ -35,6 +53,7 @@ export default function Mywallet() {
   useEffect(() => {
     fetchRates().then(() => console.log("Fetched rates"));
     fetchWallet().then(() => console.log("Fetched Info"));
+    loadTransactions().then(() => console.log("Fetched Transactions"));
   }, []);
 
   return (
@@ -124,52 +143,26 @@ export default function Mywallet() {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>31657900748</td>
-                                  <td>Jun 20 02:40:42</td>
-                                  <td>USD 100</td>
-                                  <td>Skrill</td>
-                                  <td>
-                                    <a className="badge bg-warning text-dark">
-                                      Pending
-                                    </a>
-                                  </td>
-                                  <td>Deposit</td>
-                                </tr>
-                                <tr>
-                                  <td>488576192264</td>
-                                  <td>Jan 23 11:33:35</td>
-                                  <td>USD 200</td>
-                                  <td>Wallet to Account</td>
-                                  <td>
-                                    <a className="badge bg-success">
-                                      Completed
-                                    </a>
-                                  </td>
-                                  <td>Withdrawal</td>
-                                </tr>
-                                <tr>
-                                  <td>488576192264</td>
-                                  <td>Jan 23 11:33:35</td>
-                                  <td>USD 10000</td>
-                                  <td>Skrill</td>
-                                  <td>
-                                    <a className="badge bg-info text-dark">
-                                      Processing
-                                    </a>
-                                  </td>
-                                  <td>Deposit</td>
-                                </tr>
-                                <tr>
-                                  <td>488576192264</td>
-                                  <td>Jan 23 11:33:35</td>
-                                  <td>USD 500</td>
-                                  <td>Account to Wallet</td>
-                                  <td>
-                                    <a className="badge bg-danger">Rejected</a>
-                                  </td>
-                                  <td>Deposit</td>
-                                </tr>
+                                {transactions.map((e, i) => {
+                                  return (
+                                    <tr key={`tr-${i}`}>
+                                      <td>#{e.id}</td>
+                                      <td>{formatDate(new Date(e.date))}</td>
+                                      <td>USD {e.amount}</td>
+                                      <td>{e.action}</td>
+                                      <td>
+                                        <a
+                                          className={`badge ${getBadgeClass(
+                                            e.status
+                                          )}`}
+                                        >
+                                          {e.status}
+                                        </a>
+                                      </td>
+                                      <td>{e.t_type}</td>
+                                    </tr>
+                                  );
+                                })}
                               </tbody>
                             </table>
                           </div>

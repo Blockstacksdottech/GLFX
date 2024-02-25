@@ -157,6 +157,7 @@ class TransactionCreateAPIView(APIView):
         source = request.data.get('source')
         action = request.data.get('action')
         amount = request.data.get('amount')
+        print(request.data)
         image_file = request.data.get('image')
         comment = request.data.get("description", "")
 
@@ -172,7 +173,9 @@ class TransactionCreateAPIView(APIView):
             if action == 'deposit':
                 transaction_data["action"] = "Deposit to wallet"
                 serializer = TransactionSerializer(data=transaction_data)
+                print('before')
                 if serializer.is_valid():
+                    print('transaction valid')
                     transaction = serializer.save()
                     # Create document
                     if image_file:
@@ -180,11 +183,15 @@ class TransactionCreateAPIView(APIView):
                             'transaction': transaction.id, 'image': image_file}
                         document_serializer = DocumentsSerializer(
                             data=document_data)
+                        print("document serializer check here")
+                        print(document_serializer.is_valid())
                         if document_serializer.is_valid():
                             document_serializer.save()
                         else:
                             transaction.delete()
                             return Response(document_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    print(serializer.errors)
             else:  # action is withdrawal
                 transaction_data["action"] = "Withdrawal from wallet"
                 serializer = TransactionSerializer(data=transaction_data)
@@ -262,9 +269,9 @@ class SendReply(APIView):
         ticket_id = data.get("ticket", False)
         message = data.get("message", False)
         ticket = Ticket.objects.filter(id=int(ticket_id)).first()
-        if ticket:
+        if ticket and (ticket.user.id == user.id or user.is_superuser):
             m = MessagesSerializer(
-                data={"ticket": ticket.id, "message": message})
+                data={"ticket": ticket.id, "message": message, "from_admin": user.is_superuser})
             if m.is_valid():
                 m.save()
                 return Response({"failed": False}, status=status.HTTP_200_OK)

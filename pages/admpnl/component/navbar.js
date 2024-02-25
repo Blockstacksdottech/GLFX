@@ -10,7 +10,7 @@ export default function Navbar() {
     <>
       <nav className="navbar navbar-expand-lg sticky-top bg-light">
         <div className="container-fluid">
-          <a className="navbar-brand h1" href="./">
+          <a className="navbar-brand h1" href="./clients">
             <img
               className="img-fluid logo"
               src="../../assets/brand/logo.png"
@@ -41,7 +41,7 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <a className="nav-link" href="/admpnl/support">
                   Support
                 </a>
               </li>

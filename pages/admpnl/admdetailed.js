@@ -1,11 +1,11 @@
 import Head from "next/head";
-import Navbar from "../component/navbar";
-import Sidebar from "../component/sidebar";
+
 import Checker from "@/components/Checker";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { formatDate, formatDate2, postReq, req } from "@/helpers/helpers";
+import Navbar from "./component/navbar";
 
 export default function Detailed() {
   const [ticket, setTicket] = useState();
@@ -16,7 +16,7 @@ export default function Detailed() {
   const fetchTicket = async () => {
     const tid = params.get("ticket");
     if (tid) {
-      const resp = await req(`tickets/${tid}`);
+      const resp = await req(`admin/admtickets/${tid}`);
       if (resp) {
         setTicket(resp);
         setLoading(false);
@@ -44,21 +44,17 @@ export default function Detailed() {
       <Head>
         <title>GLFX - Support | Message Details</title>
       </Head>
-      <Checker admin={false}>
+      <Checker admin={true}>
         {!loading && ticket && (
           <>
             <Navbar />
             <div className="container-fluid">
               <div className="row">
-                <div className="col-md-3 col-lg-2 p-0">
-                  <Sidebar />
-                </div>
-
-                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+                <main className="col-md-12 ms-sm-auto col-lg-12 px-md-4 bg-grey">
                   <div className="pt-3 pb-2 mb-3 border-bottom">
                     <div className="clearfix">
                       <div className="h5 float-start">
-                        <a href="/client/support/inbox/" className="text-dark">
+                        <a href="/admpnl/support" className="text-dark">
                           <i className="bi bi-arrow-left-circle"></i> Back to
                           Inbox
                         </a>
@@ -85,14 +81,14 @@ export default function Detailed() {
 
                       <div className="chat-body">
                         {ticket.messages.map((e, i) => {
-                          if (e.from_admin) {
+                          if (!e.from_admin) {
                             return (
                               <p
                                 key={`message-${e.id}`}
                                 className="small px-2 py-1 text-dark text-wrap text-start my-2"
                               >
                                 <span className="h6">
-                                  Support <br />
+                                  User <br />
                                 </span>
                                 {e.message}
                               </p>

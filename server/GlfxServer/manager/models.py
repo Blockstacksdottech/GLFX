@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(default="", max_length=255)
     is_verified = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
+    is_baned = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -83,7 +84,8 @@ class Transaction(models.Model):
         default="", max_length=255)  # Deposit | Withdrawal
     source = models.CharField(default="", max_length=255)
     source_id = models.IntegerField(default=0)
-    comment = models.CharField(default="", max_length=255)
+    comment = models.CharField(default="", max_length=255, blank=True)
+    done = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -112,6 +114,7 @@ class Ticket(models.Model):
 class Messages(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     message = models.CharField(default="", max_length=255)
+    from_admin = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

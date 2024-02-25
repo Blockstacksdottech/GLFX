@@ -39,6 +39,7 @@ export default function Financialinformation() {
     const resp = await postReq("financialinfo", info);
     if (resp) {
       await fetchInfo();
+      toast.success("Updated");
     } else {
       toast.error("Failed updating financial info");
     }
