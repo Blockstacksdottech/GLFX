@@ -46,7 +46,7 @@ export default function Personaldetails() {
                         </div>
                       </div>
                       <div className="row mb-3">
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           <label className="mb-2">Phone Number</label>
                           <input
                             type="number"
@@ -54,7 +54,16 @@ export default function Personaldetails() {
                             placeholder="Phone Number"
                           />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
+                          <label className="mb-2">Email Address</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Email Address"
+                            readOnly
+                          />
+                        </div>
+                        <div className="col-md-4">
                           <label className="mb-2">Date of Birth</label>
                           <input
                             type="date"
