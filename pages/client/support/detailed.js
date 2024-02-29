@@ -1,93 +1,141 @@
 import Head from "next/head";
 import Navbar from "../component/navbar";
 import Sidebar from "../component/sidebar";
+import Checker from "@/components/Checker";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
+import { formatDate, formatDate2, postReq, req } from "@/helpers/helpers";
 
 export default function Detailed() {
+  const [ticket, setTicket] = useState();
+  const [loading, setLoading] = useState();
+  const params = useSearchParams();
+  const [message, setMessage] = useState();
+
+  const fetchTicket = async () => {
+    const tid = params.get("ticket");
+    if (tid) {
+      const resp = await req(`tickets/${tid}`);
+      if (resp) {
+        setTicket(resp);
+        setLoading(false);
+      } else {
+        toast.error("Failed fetching ticket");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchTicket().then(() => console.log("fetching ticket"));
+  }, [params]);
+
+  const reply = async () => {
+    const resp = await postReq("reply", { ticket: ticket.id, message });
+    if (resp) {
+      await fetchTicket();
+    } else {
+      toast.error("Failed replying");
+    }
+  };
+
   return (
     <>
       <Head>
         <title>GLFX - Support | Message Details</title>
       </Head>
-      <Navbar />
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-3 col-lg-2 p-0">
-            <Sidebar />
-          </div>
-
-          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
-            <div className="pt-3 pb-2 mb-3 border-bottom">
-              <div className="clearfix">
-                <div className="h5 float-start">
-                  <a href="/client/support/inbox/" className="text-dark">
-                    <i className="bi bi-arrow-left-circle"></i> Back to Inbox
-                  </a>
+      <Checker admin={false}>
+        {!loading && ticket && (
+          <>
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-3 col-lg-2 p-0">
+                  <Sidebar />
                 </div>
-              </div>
-            </div>
 
-            <div className="card shadow-none mt-3 border border-light">
-              <div className="card-body">
-                <div className="media mb-3">
-                  <div className="media-body">
-                    <span className="media-meta float-end">
-                      12/10/2024 | 08:22 AM
-                    </span>
+                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+                  <div className="pt-3 pb-2 mb-3 border-bottom">
+                    <div className="clearfix">
+                      <div className="h5 float-start">
+                        <a href="/client/support/inbox/" className="text-dark">
+                          <i className="bi bi-arrow-left-circle"></i> Back to
+                          Inbox
+                        </a>
+                      </div>
+                    </div>
+                  </div>
 
-                    <small className="text-muted">
+                  <div className="card shadow-none mt-3 border border-light">
+                    <div className="card-body">
+                      <div className="media mb-3">
+                        <div className="media-body">
+                          <span className="media-meta float-end">
+                            {formatDate2(new Date(ticket.date))}
+                          </span>
+
+                          {/* <small className="text-muted">
                       From : info@example.com
-                    </small>
-                    <h5 className="my-3 text-primary m-0">
-                      Subject goes here ...
-                    </h5>
-                  </div>
-                </div>
+                    </small> */}
+                          <h5 className="my-3 text-primary m-0">
+                            {ticket.subject}
+                          </h5>
+                        </div>
+                      </div>
 
-                <div className="chat-body">
-                  <p className="small px-2 py-1 text-dark text-wrap text-start my-2">
-                    <span className="h6">
-                      Support <br />
-                    </span>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                    natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Donec quam felis, ultricies nec, pellentesque
-                    eu, pretium quis, sem.
-                  </p>
-
-                  <p className="small px-2 py-1 text-secondary text-wrap text-end my-2">
-                    <span className="h6">
-                      Me <br />
-                    </span>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                    natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Donec quam felis, ultricies nec, pellentesque
-                    eu, pretium quis, sem.
-                  </p>
-                </div>
-                <hr />
-                <div className="media mt-3">
-                  <div className="media-body">
-                    <textarea
-                      className="form-control"
-                      rows="9"
-                      placeholder="Reply here..."
-                    ></textarea>
+                      <div className="chat-body">
+                        {ticket.messages.map((e, i) => {
+                          if (e.from_admin) {
+                            return (
+                              <p
+                                key={`message-${e.id}`}
+                                className="small px-2 py-1 text-dark text-wrap text-start my-2"
+                              >
+                                <span className="h6">
+                                  Support <br />
+                                </span>
+                                {e.message}
+                              </p>
+                            );
+                          } else {
+                            return (
+                              <p className="small px-2 py-1 text-secondary text-wrap text-end my-2">
+                                <span className="h6">
+                                  Me <br />
+                                </span>
+                                {e.message}
+                              </p>
+                            );
+                          }
+                        })}
+                      </div>
+                      <hr />
+                      <div className="media mt-3">
+                        <div className="media-body">
+                          <textarea
+                            className="form-control"
+                            rows="9"
+                            placeholder="Reply here..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                          ></textarea>
+                        </div>
+                      </div>
+                      <div className="clearfix mt-3">
+                        <div className="float-end">
+                          <a className="btn btn-primary" onClick={reply}>
+                            <i className="bi bi-send mr-1"></i> Send
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="clearfix mt-3">
-                  <div className="float-end">
-                    <a className="btn btn-primary">
-                      <i className="bi bi-send mr-1"></i> Send
-                    </a>
-                  </div>
-                </div>
+                </main>
               </div>
             </div>
-          </main>
-        </div>
-      </div>
+          </>
+        )}
+      </Checker>
     </>
   );
 }

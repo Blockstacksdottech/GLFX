@@ -1,6 +1,11 @@
+import { UserContext } from "@/contexts/UserContext";
+import { logout } from "@/helpers/helpers";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  const [User, setUser] = useContext(UserContext);
+
   return (
     <>
       <div className="sidebar bg-light-grey">
@@ -181,7 +186,7 @@ export default function Sidebar() {
                   Inbox
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className="nav-link d-flex align-items-center gap-2"
                   href="/client/support/sent/"
@@ -192,11 +197,16 @@ export default function Sidebar() {
                   <i className="bi bi-arrow-return-right"></i>
                   Sent
                 </a>
-              </li>
+              </li> */}
             </ul>
             <hr className="my-1" />
             <ul className="nav flex-column">
-              <li className="nav-item">
+              <li
+                className="nav-item"
+                onClick={() => {
+                  logout(setUser);
+                }}
+              >
                 <a
                   className="nav-link d-flex align-items-center gap-2 text-red"
                   href="/login"

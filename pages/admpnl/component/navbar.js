@@ -1,9 +1,16 @@
+import Checker from "@/components/Checker";
+import { UserContext } from "@/contexts/UserContext";
+import { logout } from "@/helpers/helpers";
+import { useContext } from "react";
+
 export default function Navbar() {
+  const [User, setUser] = useContext(UserContext);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg sticky-top bg-light">
         <div className="container-fluid">
-          <a className="navbar-brand h1" href="./">
+          <a className="navbar-brand h1" href="./clients">
             <img
               className="img-fluid logo"
               src="../../assets/brand/logo.png"
@@ -35,7 +42,17 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-danger" href="/login">
+
+                <a className="nav-link" href="/admpnl/support">
+                  Support
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link text-danger"
+                  onClick={() => logout(setUser)}
+                >
+
                   <i class="bi bi-door-closed"></i> Logout
                 </a>
               </li>
