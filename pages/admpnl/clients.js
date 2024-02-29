@@ -36,51 +36,11 @@ export default function Clients() {
                     <td className="clearfix">
                       <div className="float-end">
                         <a
-                          href="/admpnl/accounts"
-                          className="btn btn-sm btn-secondary me-2"
+                          href="/admpnl/kyc"
+                          className="btn btn-sm btn-light me-2"
                         >
-                          Accounts
+                          Documents
                         </a>
-                        <a
-                          href="/admpnl/wallets"
-                          className="btn btn-sm btn-dark me-2"
-                        >
-                          Transactions
-                        </a>
-                        <a className="btn btn-sm btn-danger">Ban</a>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-capital">first + Last Name</td>
-                    <td className="text-capital">Company Name</td>
-                    <td>email@gmail.com</td>
-                    <td>+12 1234567890</td>
-                    <td className="clearfix">
-                      <div className="float-end">
-                        <a
-                          href="/admpnl/accounts"
-                          className="btn btn-sm btn-secondary me-2"
-                        >
-                          Accounts
-                        </a>
-                        <a
-                          href="/admpnl/wallets"
-                          className="btn btn-sm btn-dark me-2"
-                        >
-                          Transactions
-                        </a>
-                        <a className="btn btn-sm btn-danger">Ban</a>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="text-capital">first + Last Name</td>
-                    <td className="text-capital">Company Name</td>
-                    <td>email@gmail.com</td>
-                    <td>+12 1234567890</td>
-                    <td className="clearfix">
-                      <div className="float-end">
                         <a
                           href="/admpnl/accounts"
                           className="btn btn-sm btn-secondary me-2"
@@ -105,6 +65,12 @@ export default function Clients() {
                     <td className="clearfix">
                       <div className="float-end">
                         <a
+                          href="/admpnl/kyc"
+                          className="btn btn-sm btn-light me-2"
+                        >
+                          Documents
+                        </a>
+                        <a
                           href="/admpnl/accounts"
                           className="btn btn-sm btn-secondary me-2"
                         >
@@ -127,6 +93,70 @@ export default function Clients() {
                     <td>+12 1234567890</td>
                     <td className="clearfix">
                       <div className="float-end">
+                        <a
+                          href="/admpnl/kyc"
+                          className="btn btn-sm btn-light me-2"
+                        >
+                          Documents
+                        </a>
+                        <a
+                          href="/admpnl/accounts"
+                          className="btn btn-sm btn-secondary me-2"
+                        >
+                          Accounts
+                        </a>
+                        <a
+                          href="/admpnl/wallets"
+                          className="btn btn-sm btn-dark me-2"
+                        >
+                          Transactions
+                        </a>
+                        <a className="btn btn-sm btn-danger">Ban</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="text-capital">first + Last Name</td>
+                    <td className="text-capital">Company Name</td>
+                    <td>email@gmail.com</td>
+                    <td>+12 1234567890</td>
+                    <td className="clearfix">
+                      <div className="float-end">
+                        <a
+                          href="/admpnl/kyc"
+                          className="btn btn-sm btn-light me-2"
+                        >
+                          Documents
+                        </a>
+                        <a
+                          href="/admpnl/accounts"
+                          className="btn btn-sm btn-secondary me-2"
+                        >
+                          Accounts
+                        </a>
+                        <a
+                          href="/admpnl/wallets"
+                          className="btn btn-sm btn-dark me-2"
+                        >
+                          Transactions
+                        </a>
+                        <a className="btn btn-sm btn-danger">Ban</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="text-capital">first + Last Name</td>
+                    <td className="text-capital">Company Name</td>
+                    <td>email@gmail.com</td>
+                    <td>+12 1234567890</td>
+                    <td className="clearfix">
+                      <div className="float-end">
+                        <a
+                          href="/admpnl/kyc"
+                          className="btn btn-sm btn-light me-2"
+                        >
+                          Documents
+                        </a>
                         <a
                           href="/admpnl/accounts"
                           className="btn btn-sm btn-secondary me-2"
