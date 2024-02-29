@@ -148,6 +148,15 @@ export default function Personaldetails() {
                                   onChange={handleUserInfoUpdate}
                                 />
                               </div>
+                  <div className="col-md-4">
+                          <label className="mb-2">Email Address</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Email Address"
+                            readOnly
+                          />
+                        </div>
                               <div className="col-md-6">
                                 <label className="mb-2">Date of Birth</label>
                                 <input
@@ -628,7 +637,9 @@ export default function Personaldetails() {
                           </form>
                         </div>
                       </div>
+
                     </div>
+
                   </div>
                 </main>
               </div>

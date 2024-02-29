@@ -20,13 +20,13 @@ export default function Navbar() {
           <li className="nav-item me-2">
             <a className="nav-link">
               <i className="bi bi-shield-fill-check text-green me-1"></i>
-              <small>Document Verified</small>
+              <small>Email Verified</small>
             </a>
           </li>
           <li className="nav-item me-2">
-            <a className="nav-link">
-              <i className="bi bi-shield-fill-check text-green me-1"></i>
-              <small>Email Verified</small>
+            <a className="nav-link" href="/client/myprofile/documentation/">
+              <i className="bi bi-shield-fill-x text-red me-1"></i>
+              <small>Document not Verified</small>
             </a>
           </li>
           <li className="nav-item d-md-none">
