@@ -22,6 +22,7 @@ urlpatterns = [
     path("personalinfo", PersonalInfoV.as_view(), name="personal_info"),
     path("financialinfo", FinancialInfoV.as_view(), name="financial_info"),
     path("security", SecurityUpdateV.as_view(), name="security_view"),
+    path("verification", VerificationView.as_view(), name="verification_view"),
     # wallet endpoints
     path("wallet", WalletV.as_view(), name="wallet"),
     # Deposit / withdrawal endpoints

@@ -30,6 +30,18 @@ class AdminStatus(APIView):
         if all([idd, status_val]):
             tr = Transaction.objects.filter(id=int(idd)).first()
             if not tr.done:
+                if tr.source.lower() == "wallet":
+                    w = Wallet.objects.filter(id=int(tr.source_id)).first()
+                else:
+                    w = Account.objects.filter(id=int(tr.source_id)).first()
+                print(w)
+                if w:
+                    if tr.t_type.lower() == "withdrawal":
+                        w.amount -= tr.amount
+                    else:
+                        print("Depositing")
+                        w.amount += tr.amount
+                    w.save()
                 tr.status = status_val
                 tr.done = True
                 tr.save()
@@ -56,6 +68,12 @@ class AdminHandleUser(APIView):
                     u.is_baned = True
                 elif action == "unban":
                     u.is_baned = False
+                elif action == "approve":
+                    u.is_verified = True
+                elif action == "unapprove":
+                    u.is_verified = False
+                    d = VerificationDocuments.objects.filter(user=u).first()
+                    d.delete()
                 u.save()
                 return Response({"failed": False})
             else:

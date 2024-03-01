@@ -25,6 +25,8 @@ const Checker = ({ children, admin, register }) => {
       obj.surname = resp.surname;
       obj.company_name = resp.company_name;
       obj.phone = resp.phone;
+      obj.isBaned = resp.is_baned;
+      obj.isVerified = resp.is_verified;
       setUser(obj);
       return obj;
     } else {

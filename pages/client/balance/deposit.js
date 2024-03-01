@@ -89,6 +89,7 @@ export default function Deposit() {
       toast.warning(`Choose an amount greater than 0`);
     } else {
       const body = {
+        source_id: selectedAccount.id,
         source: choice,
         action: "deposit",
         amount,

@@ -115,28 +115,30 @@ export default function Inbox() {
                   <div className="table-responsive my-4">
                     <table className="table table-borderless">
                       <tbody>
-                        {splited[current].map((e, i) => {
-                          return (
-                            <tr key={e.id}>
-                              <td className="action">
-                                <a onClick={() => deleteTicket(e.id)}>
-                                  <i className="bi bi-trash text-danger"></i>
-                                </a>
-                              </td>
-                              <td className="subject">
-                                <a
-                                  href={`/client/support/detailed?ticket=${e.id}`}
-                                  className="text-dark"
-                                >
-                                  {e.subject}
-                                </a>
-                              </td>
-                              <td className="time float-end">
-                                {formatDate2(e.date)}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        {splited &&
+                          splited[current] &&
+                          splited[current].map((e, i) => {
+                            return (
+                              <tr key={e.id}>
+                                <td className="action">
+                                  <a onClick={() => deleteTicket(e.id)}>
+                                    <i className="bi bi-trash text-danger"></i>
+                                  </a>
+                                </td>
+                                <td className="subject">
+                                  <a
+                                    href={`/client/support/detailed?ticket=${e.id}`}
+                                    className="text-dark"
+                                  >
+                                    {e.subject}
+                                  </a>
+                                </td>
+                                <td className="time float-end">
+                                  {formatDate2(e.date)}
+                                </td>
+                              </tr>
+                            );
+                          })}
                       </tbody>
                     </table>
                   </div>

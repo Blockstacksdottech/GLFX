@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import (
     TokenObtainPairView)
-from .serializer import MyTokenObtainPairSerializer, RegisterSerializer, PersonalInfoSerializer, FinancialInfoSerializer, WalletSerializer, TransactionSerializer, DocumentsSerializer, AccountSerializer, TicketSerializer, MessagesSerializer, TicketWithMessagesSerializer
+from .serializer import MyTokenObtainPairSerializer, RegisterSerializer, PersonalInfoSerializer, FinancialInfoSerializer, WalletSerializer, TransactionSerializer, DocumentsSerializer, AccountSerializer, TicketSerializer, MessagesSerializer, TicketWithMessagesSerializer, VerificationSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import permissions, status
@@ -155,6 +155,7 @@ class WalletV(APIView):
 class TransactionCreateAPIView(APIView):
     def post(self, request, *args, **kwargs):
         source = request.data.get('source')
+        source_id = request.data.get('source_id')
         action = request.data.get('action')
         amount = request.data.get('amount')
         print(request.data)
@@ -170,6 +171,7 @@ class TransactionCreateAPIView(APIView):
                             'amount': amount, 't_type': action, "comment": comment}
         if source == 'wallet':
             transaction_data["source"] = source
+            transaction_data["source_id"] = source_id
             if action == 'deposit':
                 transaction_data["action"] = "Deposit to wallet"
                 serializer = TransactionSerializer(data=transaction_data)
@@ -193,12 +195,16 @@ class TransactionCreateAPIView(APIView):
                 else:
                     print(serializer.errors)
             else:  # action is withdrawal
+                print("withdrawal here")
                 transaction_data["action"] = "Withdrawal from wallet"
                 serializer = TransactionSerializer(data=transaction_data)
                 if serializer.is_valid():
                     serializer.save()
+                else:
+                    print(serializer.errors)
         else:  # source is account
             transaction_data["source"] = source
+            transaction_data["source_id"] = source_id
             if action == 'deposit':
                 serializer = TransactionSerializer(data=transaction_data)
                 if serializer.is_valid():
@@ -207,6 +213,46 @@ class TransactionCreateAPIView(APIView):
                 return Response({"error": "Withdrawal from account not supported"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class VerificationView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        u = request.user
+        doc = VerificationDocuments.objects.first()
+        if doc:
+            doc_s = VerificationSerializer(doc)
+            return Response(doc_s.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": False})
+
+    def post(self, request, format=None):
+        u = request.user
+        country = request.data.get("country", False)
+        docType = request.data.get("docType", False)
+        front = request.data.get("front", False)
+        back = request.data.get("back", False)
+
+        if all([country, docType, front, back]):
+            body = {"user": u.id, "country": country, "docType": docType,
+                    "front": front, "back": back}
+            if not u.is_verified:
+                doc = VerificationDocuments.objects.filter(user=u).first()
+                if doc:
+                    doc.delete()
+                print(body)
+                doc_s = VerificationSerializer(data=body)
+                if doc_s.is_valid():
+                    d = doc_s.save()
+                    return Response(doc_s.data, status=status.HTTP_201_CREATED)
+                else:
+                    print(doc_s.errors)
+                    return Response({"verified": False}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"verified": True})
+        else:
+            return Response({"verified": False}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TransactionV(APIView):

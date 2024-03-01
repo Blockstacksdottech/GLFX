@@ -7,7 +7,8 @@ from .models import (
     Documents,
     Account,
     Ticket,
-    Messages
+    Messages,
+    VerificationDocuments
 )
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -115,7 +116,7 @@ class RegisterSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'password', 'username',
-                  'name', 'surname', 'company_name', 'phone', 'joined', 'is_baned']
+                  'name', 'surname', 'company_name', 'phone', 'joined', 'is_baned', 'is_verified']
         extra_kwargs = {'password': {'write_only': True, 'required': False}}
 
     def create(self, validated, *args, **kwargs):
@@ -123,6 +124,12 @@ class RegisterSerializer(ModelSerializer):
         u.set_password(validated['password'])
         u.save()
         return RegisterSerializer(u).data
+
+
+class VerificationSerializer(ModelSerializer):
+    class Meta:
+        model = VerificationDocuments
+        fields = "__all__"
 
 
 class PersonalInfoSerializer(ModelSerializer):

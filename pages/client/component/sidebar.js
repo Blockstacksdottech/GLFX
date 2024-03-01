@@ -93,6 +93,18 @@ export default function Sidebar() {
               <li className="nav-item">
                 <a
                   className="nav-link d-flex align-items-center gap-2"
+                  href="/client/myprofile/kyc/"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="Personal Details"
+                >
+                  <i className="bi bi-person"></i>
+                  Verification
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link d-flex align-items-center gap-2"
                   href="/client/myprofile/financialinformation/"
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"

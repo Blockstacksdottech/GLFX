@@ -14,9 +14,9 @@ export const RegsiterValidator = z.object({
   surname: z
     .string()
     .min(3, { message: "surname should be at least 3 characters long" }),
-  company_name: z
+  /* company_name: z
     .string()
-    .min(3, { message: "Company name should be at least 3 characters long" }),
+    .min(3, { message: "Company name should be at least 3 characters long" }), */
   phone: z.string().regex(phoneRegex, "Invalid phone number"),
   password: z
     .string()

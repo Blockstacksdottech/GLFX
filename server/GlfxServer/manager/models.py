@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     name = models.CharField(default="", max_length=255)
     surname = models.CharField(default="", max_length=255)
-    company_name = models.CharField(default="", max_length=255)
+    company_name = models.CharField(default="", max_length=255, blank=True)
     phone = models.CharField(default="", max_length=255)
     is_verified = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -16,6 +16,17 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class VerificationDocuments(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    country = models.CharField(default="", max_length=255)
+    docType = models.CharField(default="", max_length=255)
+    front = models.ImageField(upload_to="documents")
+    back = models.ImageField(upload_to="documents")
+
+    def __str__(self):
+        return self.user.username
 
 
 class PersonalInfo(models.Model):

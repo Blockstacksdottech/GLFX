@@ -89,6 +89,12 @@ export default function Clients() {
                                     Transactions
                                   </a>
                                   <a
+                                    href={`/admpnl/kyc?id=${e.id}`}
+                                    className="btn btn-sm btn-dark me-2"
+                                  >
+                                    Documents
+                                  </a>
+                                  <a
                                     className="btn btn-sm btn-danger"
                                     onClick={() =>
                                       handleUser(
@@ -110,7 +116,6 @@ export default function Clients() {
                 </main>
               </div>
             </div>
-
           </>
         )}
       </Checker>

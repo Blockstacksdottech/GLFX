@@ -103,6 +103,52 @@ export const handleFileSubmit = async (files) => {
   }
 };
 
+export const handleVerificationSubmit = async (
+  file1,
+  file2,
+  endpoint,
+  body = null
+) => {
+  let form_data = new FormData();
+  let access = sessionStorage.getItem("accessToken");
+  let headers = set_header(access, true);
+  if (body) {
+    for (let key of Object.keys(body)) {
+      form_data.append(key, body[key]);
+    }
+  }
+
+  form_data.append("front", file1, file1.name);
+  form_data.append("back", file2, file2.name);
+  let url = api + endpoint;
+  try {
+    let resp = await axios.post(url, form_data, {
+      headers,
+    });
+    console.log(resp.status);
+
+    if (resp.status == 201) {
+      return true;
+    } else {
+      console.log("other errors");
+      return false;
+    }
+  } catch (error) {
+    let resp = error.response;
+    if (resp.status == 401) {
+      let dec = await refreshToken();
+      if (dec) {
+        return handleVerificationSubmit(file1, file2, endpoint, body);
+      } else {
+        return false;
+      }
+    } else {
+      console.log("other errors");
+      return false;
+    }
+  }
+};
+
 export const handleSingleFileSubmit = async (file, endpoint, body = null) => {
   let form_data = new FormData();
   let access = sessionStorage.getItem("accessToken");
@@ -472,3 +518,7 @@ export function formatDate2(dateString) {
 
   return `${month} ${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
+export const formatImage = (p) => {
+  return API_URL + p;
+};

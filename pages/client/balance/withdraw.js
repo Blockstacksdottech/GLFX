@@ -87,8 +87,11 @@ export default function Withdraw() {
       );
     } else if (!amount || amount <= 0) {
       toast.warning(`Choose an amount greater than 0`);
+    } else if (selectedAccount.amount < amount) {
+      toast.warning("Amount greater than balance");
     } else {
       const body = {
+        source_id: selectedAccount.id,
         source: choice,
         action: "withdrawal",
         amount,
@@ -97,6 +100,7 @@ export default function Withdraw() {
       const resp = await postReq("management", body);
       if (resp) {
         toast.success("Request Created");
+        loadTransactions();
       } else {
         toast.error("Failed submiting the request");
       }

@@ -1,4 +1,9 @@
+import { UserContext } from "@/contexts/UserContext";
+import { useContext } from "react";
+
 export default function Navbar() {
+  const [User, setUser] = useContext(UserContext);
+
   return (
     <>
       <header className="navbar sticky-top bg-light flex-md-nowrap p-0">
@@ -25,8 +30,19 @@ export default function Navbar() {
           </li>
           <li className="nav-item me-2">
             <a className="nav-link" href="/client/myprofile/documentation/">
-              <i className="bi bi-shield-fill-x text-red me-1"></i>
-              <small>Document not Verified</small>
+              {!User.isVerified && (
+                <>
+                  <i className="bi bi-shield-fill-x text-red me-1"></i>
+                  <small>Document not Verified</small>
+                </>
+              )}
+
+              {User.isVerified && (
+                <>
+                  <i className="bi bi-shield-fill-check text-green me-1"></i>
+                  <small>Document Verified</small>
+                </>
+              )}
             </a>
           </li>
           <li className="nav-item d-md-none">

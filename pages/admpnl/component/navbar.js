@@ -41,18 +41,17 @@ export default function Navbar() {
                   Clients
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
 
                 <a className="nav-link" href="/admpnl/support">
                   Support
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <a
                   className="nav-link text-danger"
                   onClick={() => logout(setUser)}
                 >
-
                   <i class="bi bi-door-closed"></i> Logout
                 </a>
               </li>
@@ -60,7 +59,10 @@ export default function Navbar() {
           </div>
 
           <div class="d-flex">
-            <a className="btn btn-primary position-relative" href="#">
+            <a
+              className="btn btn-primary position-relative"
+              href="/admpnl/support"
+            >
               Support{" "}
               <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
                 <span class="visually-hidden">New alerts</span>

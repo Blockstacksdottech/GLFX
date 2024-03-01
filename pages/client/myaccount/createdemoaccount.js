@@ -6,6 +6,7 @@ import { UserContext } from "@/contexts/UserContext";
 import Checker from "@/components/Checker";
 import { toast } from "react-toastify";
 import { postReq } from "@/helpers/helpers";
+import { useRouter } from "next/router";
 
 export default function Createdemoaccount() {
   const [User, setUser] = useContext(UserContext);
@@ -20,6 +21,7 @@ export default function Createdemoaccount() {
     balance: 0,
   });
   const [checked, setChecked] = useState(false);
+  const router = useRouter();
 
   const handleFieldChange = (e) => {
     const name = e.target.name;
@@ -40,6 +42,7 @@ export default function Createdemoaccount() {
       const resp = await postReq("accounts/", data);
       if (resp) {
         toast.success("Account Created Successfully");
+        router.push("/client/myaccount/demoaccount");
       } else {
         toast.error("Failed Creating Account");
       }
