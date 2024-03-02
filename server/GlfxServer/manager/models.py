@@ -126,7 +126,7 @@ class Ticket(models.Model):
 
 class Messages(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    message = models.CharField(default="", max_length=255)
+    message = models.TextField(default="")
     from_admin = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 

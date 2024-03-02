@@ -30,6 +30,14 @@ export default function Detailed() {
     fetchTicket().then(() => console.log("fetching ticket"));
   }, [params]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchTicket();
+    }, 10000);
+
+    return () => clearInterval(intervalId); // Cleanup function
+  }, []);
+
   const reply = async () => {
     const resp = await postReq("reply", { ticket: ticket.id, message });
     if (resp) {
