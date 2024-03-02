@@ -70,9 +70,9 @@ export default function Detailed() {
                             {formatDate2(new Date(ticket.date))}
                           </span>
 
-                          {/* <small className="text-muted">
-                      From : info@example.com
-                    </small> */}
+                          <small className="text-muted">
+                            From : {ticket.user.email}
+                          </small>
                           <h5 className="my-3 text-primary m-0">
                             {ticket.subject}
                           </h5>
@@ -88,7 +88,8 @@ export default function Detailed() {
                                 className="small px-2 py-1 text-dark text-wrap text-start my-2"
                               >
                                 <span className="h6">
-                                  User <br />
+                                  {ticket.user.username} ({ticket.user.email}){" "}
+                                  <br />
                                 </span>
                                 {e.message}
                               </p>
@@ -97,7 +98,7 @@ export default function Detailed() {
                             return (
                               <p className="small px-2 py-1 text-secondary text-wrap text-end my-2">
                                 <span className="h6">
-                                  Me <br />
+                                  Admin <br />
                                 </span>
                                 {e.message}
                               </p>

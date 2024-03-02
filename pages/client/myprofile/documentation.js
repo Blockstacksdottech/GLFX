@@ -4,7 +4,12 @@ import Sidebar from "../component/sidebar";
 import Checker from "@/components/Checker";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
-import { handleVerificationSubmit, postReq, req } from "@/helpers/helpers";
+import {
+  formatImage,
+  handleVerificationSubmit,
+  postReq,
+  req,
+} from "@/helpers/helpers";
 import { toast } from "react-toastify";
 
 export default function Documentation() {
@@ -13,21 +18,26 @@ export default function Documentation() {
   const [front, setFront] = useState(null);
   const [back, setBack] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [doc, setDocument] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchVerificationStatus = async () => {
     const resp = await req("verification");
-    if (resp) {
-      if (!resp.status) {
-        toast.error("Not Verified");
-        setSubmitted(false);
+    console.log(`resp here`);
+    console.log(resp);
+    if (resp.id) {
+      if (!resp.status && resp.status !== undefined) {
+        //toast.error("Not Verified");
       } else {
-        toast.info(User.isVerified ? "User Verified" : "Documents submitted");
-        setSubmitted(true);
+        //toast.info(User.isVerified ? "User Verified" : "Documents submitted");
+        console.log("setting the resp");
+        setDocument(resp);
+        setCountry(resp.country);
       }
     } else {
       toast.error("Not verified");
-      setSubmitted(false);
     }
+    setLoading(false);
   };
 
   const onImageChange = (e) => {
@@ -51,16 +61,24 @@ export default function Documentation() {
         'input[name="doctype"]:checked'
       ).value;
       const temp = { country, docType: doc_type };
-      const resp = await handleVerificationSubmit(
-        front,
-        back,
-        "verification",
-        temp
-      );
-      if (resp) {
-        toast.success("Uploaded Documents");
+      if (!front) {
+        toast.warning("Upload front photo");
+      } else if (!back) {
+        toast.warning("Upload back photo");
       } else {
-        toast.error("Failed uploading documents");
+        setLoading(true);
+        const resp = await handleVerificationSubmit(
+          front,
+          back,
+          "verification",
+          temp
+        );
+        if (resp) {
+          toast.success("Uploaded Documents");
+        } else {
+          toast.error("Failed uploading documents");
+        }
+        fetchVerificationStatus();
       }
     } else {
     }
@@ -88,7 +106,7 @@ export default function Documentation() {
                   </h1>
                 </div>
               </div>
-              {!User.isVerified && !submitted && (
+              {!User.isVerified && !loading && (
                 <>
                   <div className="row">
                     <div className="col-md-9 m-auto">
@@ -497,6 +515,7 @@ export default function Documentation() {
                                   type="radio"
                                   name="doctype"
                                   value="ID"
+                                  defaultChecked={doc && doc.docType === "ID"}
                                 />
                                 <label className="form-check-label">ID</label>
                               </div>
@@ -506,6 +525,9 @@ export default function Documentation() {
                                   type="radio"
                                   name="doctype"
                                   value="passport"
+                                  defaultChecked={
+                                    doc && doc.docType === "passport"
+                                  }
                                 />
                                 <label className="form-check-label">
                                   Passport
@@ -517,6 +539,9 @@ export default function Documentation() {
                                   type="radio"
                                   name="doctype"
                                   value="permit"
+                                  defaultChecked={
+                                    doc && doc.docType === "permit"
+                                  }
                                 />
                                 <label className="form-check-label">
                                   Residence Permit
@@ -528,6 +553,9 @@ export default function Documentation() {
                                   type="radio"
                                   name="doctype"
                                   value="driver's license"
+                                  defaultChecked={
+                                    doc && doc.docType === "driver's license"
+                                  }
                                 />
                                 <label className="form-check-label">
                                   Driver's Licence
@@ -545,6 +573,15 @@ export default function Documentation() {
                                 name="front"
                                 onChange={onImageChange}
                               />
+                              {doc && false && (
+                                <div className="mb-3">
+                                  <img
+                                    src={formatImage(doc.front)}
+                                    class="img-thumbnail"
+                                    alt="Front Side of Document"
+                                  />
+                                </div>
+                              )}
                               <div className="formtext small text-red">
                                 Upload bright and clear photo of your document.
                                 All corners of the document should be visible.
@@ -562,11 +599,21 @@ export default function Documentation() {
                                 name="back"
                                 onChange={onImageChange}
                               />
+
                               <div className="formtext small text-red">
                                 Upload bright and clear photo of your document.
                                 All corners of the document should be visible.
                                 Improper document shall be rejected from Admin
                               </div>
+                              {doc && false && (
+                                <div className="mb-3">
+                                  <img
+                                    src={formatImage(doc.back)}
+                                    class="img-thumbnail"
+                                    alt="Front Side of Document"
+                                  />
+                                </div>
+                              )}
                             </div>
                             <div className="clearfix">
                               <a

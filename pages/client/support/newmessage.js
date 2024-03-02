@@ -13,7 +13,7 @@ export default function Newmessage() {
     message: "",
   });
   const router = useRouter();
-
+  const [submitting, setSubmitting] = useState(false);
   const handleFields = (e) => {
     let temp = { ...body };
     temp[e.target.name] = e.target.value;
@@ -21,13 +21,16 @@ export default function Newmessage() {
   };
 
   const submit = async () => {
+    setSubmitting(true);
     const resp = await postReq("newmessage", body);
+
     if (resp) {
       toast.success("newmessage", body);
-      router.push("/client/support/inbox");
+      router.push(`/client/support/detailed?ticket=${resp.id}`);
     } else {
       toast.error("Failed Sending Message");
     }
+    setSubmitting(false);
   };
 
   return (
@@ -73,7 +76,10 @@ export default function Newmessage() {
                   </div>
                   <div className="clearfix mt-3">
                     <div className="float-end">
-                      <a className="btn btn-primary" onClick={submit}>
+                      <a
+                        className="btn btn-primary"
+                        onClick={!submitting ? submit : () => {}}
+                      >
                         <i className="bi bi-send mr-1"></i> Send
                       </a>
                     </div>

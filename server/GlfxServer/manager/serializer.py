@@ -182,6 +182,7 @@ class MessagesSerializer(ModelSerializer):
 
 class TicketWithMessagesSerializer(ModelSerializer):
 
+    user = serializers.SerializerMethodField()
     messages = serializers.SerializerMethodField()
 
     class Meta:
@@ -191,3 +192,6 @@ class TicketWithMessagesSerializer(ModelSerializer):
     def get_messages(self, instance):
         messages = Messages.objects.filter(ticket=instance).order_by("date")
         return MessagesSerializer(messages, many=True).data
+
+    def get_user(self, instance):
+        return RegisterSerializer(instance.user).data

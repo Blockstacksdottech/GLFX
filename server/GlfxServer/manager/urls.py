@@ -32,6 +32,7 @@ urlpatterns = [
     # support
     path("newmessage", NewMessage.as_view(), name="new message"),
     path("reply", SendReply.as_view(), name="send reply"),
+    path("deleteticket", DeleteTicket.as_view(), name="delete_ticket"),
     # ViewSet Router
     path("", include(router.urls))
 ]

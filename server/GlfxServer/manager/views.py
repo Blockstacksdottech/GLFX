@@ -277,7 +277,7 @@ class AccountViewSet(ModelViewSet):
 
 class SupportViewSet(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    http_method_names = ["get", "delete"]
+    http_method_names = ["get"]
     serializer_class = TicketWithMessagesSerializer
 
     def get_queryset(self):
@@ -300,9 +300,29 @@ class NewMessage(APIView):
                 temp = MessagesSerializer(
                     data={"ticket": ts.id, "message": message})
                 if (temp.is_valid()):
-                    temp.save()
-                    return Response({"failed": False}, status=status.HTTP_201_CREATED)
+                    d = temp.save()
+                    return Response({"failed": False, "id": ts.id}, status=status.HTTP_201_CREATED)
 
+        return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteTicket(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        data = request.data
+        ticket_id = data.get("ticket", False)
+        ticket = Ticket.objects.filter(id=int(ticket_id)).first()
+        if ticket:
+            if (ticket.user.id == user.id):
+                ticket.hidden_user = True
+            if (user.is_superuser):
+                ticket.hidden_admin = True
+            ticket.save()
+            if ticket.hidden_admin and ticket.hidden_user:
+                ticket.delete()
+            return Response({"failed": False}, status=status.HTTP_200_OK)
         return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -116,6 +116,8 @@ class Ticket(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     subject = models.CharField(default="", max_length=255)
     closed = models.BooleanField(default=False)
+    hidden_user = models.BooleanField(default=False)
+    hidden_admin = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

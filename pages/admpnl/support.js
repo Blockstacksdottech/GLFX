@@ -2,7 +2,7 @@ import Head from "next/head";
 import Checker from "@/components/Checker";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
-import { deleteReq, formatDate2, req } from "@/helpers/helpers";
+import { deleteReq, formatDate2, postReq, req } from "@/helpers/helpers";
 import { toast } from "react-toastify";
 import Navbar from "./component/navbar";
 
@@ -29,6 +29,9 @@ export default function Support() {
     const final = [];
     let temp = [];
     for (const d of data) {
+      if (d.hidden_admin) {
+        continue;
+      }
       temp.push(d);
       if (temp.length === limit) {
         final.push(temp);
@@ -46,7 +49,10 @@ export default function Support() {
   }, []);
 
   const deleteTicket = async (idd) => {
-    const resp = await deleteReq(`tickets/${idd}`);
+    const body = {
+      ticket: idd,
+    };
+    const resp = await postReq(`deleteticket`, body);
     if (resp) {
       toast.success("Deleted");
       await fetchTickets();
@@ -82,22 +88,29 @@ export default function Support() {
                       <h1 className="h5 float-start">Inbox</h1>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-4 ms-auto">
-                      <form action="#">
-                        <div className="input-group flex-nowrap">
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search Mail"
-                          />
-                          <span className="input-group-text">
-                            <i className="bi bi-search"></i>
-                          </span>
-                        </div>
-                      </form>
+                  {splited.length === 0 && (
+                    <>
+                      <h1 className="text-center">Inbox Empty</h1>
+                    </>
+                  )}
+                  {splited.length > 0 && splited[current].length > 0 && (
+                    <div className="row">
+                      <div className="col-md-4 ms-auto">
+                        <form action="#">
+                          <div className="input-group flex-nowrap">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Search Mail"
+                            />
+                            <span className="input-group-text">
+                              <i className="bi bi-search"></i>
+                            </span>
+                          </div>
+                        </form>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="table-responsive my-4">
                     <table className="table table-borderless">
@@ -129,42 +142,44 @@ export default function Support() {
                       </tbody>
                     </table>
                   </div>
-                  <div className="clearfix">
-                    <div className="float-end">
-                      <nav aria-label="Page navigation example">
-                        <ul className="pagination">
-                          <li className="page-item">
-                            <a
-                              className="page-link"
-                              onClick={() => handleStep(-1)}
-                            >
-                              Previous
-                            </a>
-                          </li>
-                          {splited.map((e, i) => {
-                            return (
-                              <li className="page-item" key={`pag-${i}`}>
-                                <a
-                                  className="page-link"
-                                  onClick={() => setCurrent(i)}
-                                >
-                                  {i + 1}
-                                </a>
-                              </li>
-                            );
-                          })}
-                          <li className="page-item">
-                            <a
-                              className="page-link"
-                              onClick={() => handleStep(1)}
-                            >
-                              Next
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
+                  {splited.length > 0 && splited[current].length > 0 && (
+                    <div className="clearfix">
+                      <div className="float-end">
+                        <nav aria-label="Page navigation example">
+                          <ul className="pagination">
+                            <li className="page-item">
+                              <a
+                                className="page-link"
+                                onClick={() => handleStep(-1)}
+                              >
+                                Previous
+                              </a>
+                            </li>
+                            {splited.map((e, i) => {
+                              return (
+                                <li className="page-item" key={`pag-${i}`}>
+                                  <a
+                                    className="page-link"
+                                    onClick={() => setCurrent(i)}
+                                  >
+                                    {i + 1}
+                                  </a>
+                                </li>
+                              );
+                            })}
+                            <li className="page-item">
+                              <a
+                                className="page-link"
+                                onClick={() => handleStep(1)}
+                              >
+                                Next
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </main>
               </div>
             </div>
