@@ -24,6 +24,7 @@ class VerificationDocuments(models.Model):
     docType = models.CharField(default="", max_length=255)
     front = models.ImageField(upload_to="documents")
     back = models.ImageField(upload_to="documents")
+    isnew = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username

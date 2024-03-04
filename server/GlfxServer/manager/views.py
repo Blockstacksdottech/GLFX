@@ -51,6 +51,7 @@ class UserInfoV(APIView):
 
     def post(self, request, format=None):
         user = request.user
+        print(request.data)
         user_s = RegisterSerializer(user, data=request.data, partial=True)
         if (user_s.is_valid()):
             user_s.save()
@@ -233,22 +234,27 @@ class VerificationView(APIView):
         docType = request.data.get("docType", False)
         front = request.data.get("front", False)
         back = request.data.get("back", False)
-
-        if all([country, docType, front, back]):
+        doc = VerificationDocuments.objects.filter(user=u).first()
+        if all([country, docType, front, back]) or (all([country, docType]) and doc):
             body = {"user": u.id, "country": country, "docType": docType,
                     "front": front, "back": back}
             if not u.is_verified:
-                doc = VerificationDocuments.objects.filter(user=u).first()
-                if doc:
+
+                if doc and all([country, docType, front, back]):
                     doc.delete()
-                print(body)
-                doc_s = VerificationSerializer(data=body)
-                if doc_s.is_valid():
-                    d = doc_s.save()
-                    return Response(doc_s.data, status=status.HTTP_201_CREATED)
+
+                    doc_s = VerificationSerializer(data=body)
+                    if doc_s.is_valid():
+                        d = doc_s.save()
+                        return Response(doc_s.data, status=status.HTTP_201_CREATED)
+                    else:
+                        print(doc_s.errors)
+                        return Response({"verified": False}, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    print(doc_s.errors)
-                    return Response({"verified": False}, status=status.HTTP_400_BAD_REQUEST)
+                    doc.country = country
+                    doc.docType = docType
+                    doc.save()
+                    return Response(VerificationSerializer(doc).data, status=status.HTTP_200_OK)
             else:
                 return Response({"verified": True})
         else:

@@ -15,6 +15,8 @@ export default function Personaldetails() {
     name: User.name,
     surname: User.surname,
     phone: User.phone,
+    username: User.username,
+    email: User.email,
   });
 
   const fetchInfo = async () => {
@@ -36,11 +38,14 @@ export default function Personaldetails() {
       name: User.name,
       surname: User.surname,
       phone: User.phone,
+      username: User.username,
+      email: User.email,
     });
   }, [User]);
 
   // handlers
   const handleUserInfoUpdate = (e) => {
+    console.log(e);
     const name = e.target.name;
     const value = e.target.value;
     let temp = { ...userInfo };
@@ -64,6 +69,8 @@ export default function Personaldetails() {
       temp.name = userInfo.name;
       temp.surname = userInfo.surname;
       temp.phone = userInfo.phone;
+      temp.email = userInfo.email;
+      temp.username = userInfo.username;
       setUser(temp);
     } else {
       toast.error("Failed Updating User info");
@@ -148,15 +155,30 @@ export default function Personaldetails() {
                                   onChange={handleUserInfoUpdate}
                                 />
                               </div>
-                  <div className="col-md-4">
-                          <label className="mb-2">Email Address</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            placeholder="Email Address"
-                            readOnly
-                          />
-                        </div>
+                              <div className="col-md-6">
+                                <label className="mb-2">Email Address</label>
+                                <input
+                                  type="email"
+                                  className="form-control"
+                                  placeholder="Email Address"
+                                  name="email"
+                                  value={userInfo.email}
+                                  onChange={handleUserInfoUpdate}
+                                />
+                              </div>
+                            </div>
+                            <div className="row mb-3">
+                              <div className="col-md-6">
+                                <label className="mb-2">User Name</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Username"
+                                  name="username"
+                                  value={userInfo.username}
+                                  onChange={handleUserInfoUpdate}
+                                />
+                              </div>
                               <div className="col-md-6">
                                 <label className="mb-2">Date of Birth</label>
                                 <input
@@ -637,9 +659,7 @@ export default function Personaldetails() {
                           </form>
                         </div>
                       </div>
-
                     </div>
-
                   </div>
                 </main>
               </div>

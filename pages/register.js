@@ -25,7 +25,7 @@ export default function Register() {
       obj.joined = resp.joined;
       obj.isA = resp.s;
       obj.path = resp.path;
-      obj.emal = resp.email;
+      obj.email = resp.email;
       obj.name = resp.name;
       obj.surname = resp.surname;
       obj.company_name = resp.company_name;
@@ -89,7 +89,7 @@ export default function Register() {
             obj.joined = resp.joined;
             obj.isA = resp.s;
             obj.path = resp.path;
-            obj.emal = resp.email;
+            obj.email = resp.email;
             obj.name = resp.name;
             obj.surname = resp.surname;
             obj.company_name = resp.company_name;

@@ -5,6 +5,7 @@ import Checker from "@/components/Checker";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import {
+  docClassVerification,
   formatImage,
   handleVerificationSubmit,
   postReq,
@@ -106,12 +107,18 @@ export default function Documentation() {
                   </h1>
                 </div>
               </div>
-              {!User.isVerified && !loading && (
+              {!loading && (
                 <>
                   <div className="row">
                     <div className="col-md-9 m-auto">
                       <div className="card mb-5">
-                        <div className="card-body">
+                        {/* Status classes => not-verified, under-process, rejected, approved */}
+                        <div
+                          className={`card-body ${docClassVerification(
+                            doc,
+                            User.isVerified
+                          )}`}
+                        >
                           <form>
                             <div className="mb-3">
                               <label className="mb-2">
@@ -558,71 +565,74 @@ export default function Documentation() {
                                   }
                                 />
                                 <label className="form-check-label">
-                                  Driver's Licence
+                                  Driver's License
                                 </label>
                               </div>
                             </div>
                             <div className="mb-3">
-                              <label className="mb-2">
-                                Upload <strong>Front</strong> side of your
-                                Document
-                              </label>
-                              <input
-                                className="form-control"
-                                type="file"
-                                name="front"
-                                onChange={onImageChange}
-                              />
-                              {doc && false && (
-                                <div className="mb-3">
-                                  <img
-                                    src={formatImage(doc.front)}
-                                    class="img-thumbnail"
-                                    alt="Front Side of Document"
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <label className="mb-2">
+                                    Upload <strong>Front</strong> side of your
+                                    Document
+                                  </label>
+                                  <input
+                                    className="form-control"
+                                    type="file"
+                                    name="front"
+                                    onChange={onImageChange}
                                   />
+                                  <div className="formtext small text-red">
+                                    Upload bright and clear photo of your
+                                    document. All corners of the document should
+                                    be visible. Improper document shall be
+                                    rejected from Admin
+                                  </div>
+                                  {doc && (
+                                    <img
+                                      src={formatImage(doc.front)}
+                                      class="img-thumbnail"
+                                      alt="Front Side of Document"
+                                    />
+                                  )}
                                 </div>
-                              )}
-                              <div className="formtext small text-red">
-                                Upload bright and clear photo of your document.
-                                All corners of the document should be visible.
-                                Improper document shall be rejected from Admin
+                                <div class="col-md-6">
+                                  <label className="mb-2">
+                                    Upload <strong>Back</strong> side of your
+                                    Document
+                                  </label>
+                                  <input
+                                    className="form-control"
+                                    type="file"
+                                    name="back"
+                                    onChange={onImageChange}
+                                  />
+                                  <div className="formtext small text-red">
+                                    Upload bright and clear photo of your
+                                    document. All corners of the document should
+                                    be visible. Improper document shall be
+                                    rejected from Admin
+                                  </div>
+                                  {doc && (
+                                    <img
+                                      src={formatImage(doc.back)}
+                                      class="img-thumbnail"
+                                      alt="Front Side of Document"
+                                    />
+                                  )}
+                                </div>
                               </div>
                             </div>
-                            <div className="mb-3">
-                              <label className="mb-2">
-                                Upload <strong>Back</strong> side of your
-                                Document
-                              </label>
-                              <input
-                                className="form-control"
-                                type="file"
-                                name="back"
-                                onChange={onImageChange}
-                              />
-
-                              <div className="formtext small text-red">
-                                Upload bright and clear photo of your document.
-                                All corners of the document should be visible.
-                                Improper document shall be rejected from Admin
+                            {!User.isVerified && (
+                              <div className="clearfix">
+                                <a
+                                  className="btn btn-primary float-end"
+                                  onClick={submit}
+                                >
+                                  Save
+                                </a>
                               </div>
-                              {doc && false && (
-                                <div className="mb-3">
-                                  <img
-                                    src={formatImage(doc.back)}
-                                    class="img-thumbnail"
-                                    alt="Front Side of Document"
-                                  />
-                                </div>
-                              )}
-                            </div>
-                            <div className="clearfix">
-                              <a
-                                className="btn btn-primary float-end"
-                                onClick={submit}
-                              >
-                                Save
-                              </a>
-                            </div>
+                            )}
                           </form>
                         </div>
                       </div>

@@ -522,3 +522,15 @@ export function formatDate2(dateString) {
 export const formatImage = (p) => {
   return API_URL + p;
 };
+
+export const docClassVerification = (doc, verified) => {
+  if (doc) {
+    if (verified) {
+      return "approved";
+    } else {
+      return "under-process";
+    }
+  } else {
+    return "not-verified";
+  }
+};

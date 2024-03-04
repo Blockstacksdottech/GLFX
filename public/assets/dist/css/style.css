@@ -283,3 +283,59 @@ p {
 .logo {
   width: 30% !important;
 }
+
+.not-verified::after {
+  width:200px;
+  height:150px;
+  content: "";
+  background: url(/assets/img/not-verified.png) no-repeat;
+  opacity: 0.5;
+  top: 20%;
+  left: 50%;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.rejected::after {
+  width:200px;
+  height:150px;
+  content: "";
+  background: url(/assets/img/rejected.png) no-repeat;
+  opacity: 0.5;
+  top: 20%;
+  left: 50%;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.under-process::after {
+  width:200px;
+  height:150px;
+  content: "";
+  background: url(/assets/img/under-process.png) no-repeat;
+  opacity: 0.4;
+  top: 14%;
+  left: 50%;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.approved::after {
+  width:200px;
+  height:150px;
+  content: "";
+  background: url(/assets/img/approved.png) no-repeat;
+  opacity: 0.5;
+  top: 20%;
+  left: 50%;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+}

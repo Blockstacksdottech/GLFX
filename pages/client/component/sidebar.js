@@ -90,7 +90,7 @@ export default function Sidebar() {
                   Personal Details
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className="nav-link d-flex align-items-center gap-2"
                   href="/client/myprofile/kyc/"
@@ -101,7 +101,7 @@ export default function Sidebar() {
                   <i className="bi bi-person"></i>
                   Verification
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <a
                   className="nav-link d-flex align-items-center gap-2"
