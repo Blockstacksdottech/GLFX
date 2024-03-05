@@ -16,40 +16,40 @@ export default function Liveaccount() {
         <title>GLFX - My Account | Live Account</title>
       </Head>
       <Checker admin={false}>
-        <LoadingOverlay active={loading} spinner text={`Loading...`}>
-          <Navbar />
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-3 col-lg-2 p-0">
-                <Sidebar />
-              </div>
+        {/* <LoadingOverlay active={loading} spinner text={`Loading...`}> */}
+        <Navbar />
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-3 col-lg-2 p-0">
+              <Sidebar />
+            </div>
 
-              <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
-                <div className="pt-3 pb-2 mb-3 border-bottom">
-                  <div className="clearfix">
-                    <h1 className="h5 float-start">Live Accounts</h1>
-                    <div className="float-end">
-                      <a className="btn btn-info" href="#" onClick={disabled}>
-                        Create Live Account
-                      </a>
-                    </div>
+            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+              <div className="pt-3 pb-2 mb-3 border-bottom">
+                <div className="clearfix">
+                  <h1 className="h5 float-start">Live Accounts</h1>
+                  <div className="float-end">
+                    <a className="btn btn-info" href="#" onClick={disabled}>
+                      Create Live Account
+                    </a>
                   </div>
                 </div>
+              </div>
 
-                <div className="table-responsive">
-                  <table className="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Balance</th>
-                        <th scope="col">Platform</th>
-                        <th scope="col">Leverage</th>
-                        <th scope="col">Credits</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {/*  <tr>
+              <div className="table-responsive">
+                <table className="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Balance</th>
+                      <th scope="col">Platform</th>
+                      <th scope="col">Leverage</th>
+                      <th scope="col">Credits</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/*  <tr>
                     <td>
                       <div className="row">
                         <div className="col-2">
@@ -85,13 +85,13 @@ export default function Liveaccount() {
                       </a>
                     </td>
                   </tr> */}
-                    </tbody>
-                  </table>
-                </div>
-              </main>
-            </div>
+                  </tbody>
+                </table>
+              </div>
+            </main>
           </div>
-        </LoadingOverlay>
+        </div>
+        {/* </LoadingOverlay> */}
       </Checker>
     </>
   );
