@@ -4,6 +4,7 @@ import Checker from "@/components/Checker";
 import { useEffect, useState } from "react";
 import { postReq, req } from "@/helpers/helpers";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 export default function Clients() {
   const [users, setUsers] = useState([]);
@@ -63,6 +64,7 @@ export default function Clients() {
                           <th scope="col">Company Name</th>
                           <th scope="col">Email</th>
                           <th scope="col">Phone</th>
+                          <th scope="col">Status</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>
@@ -70,10 +72,17 @@ export default function Clients() {
                         {users.map((e, i) => {
                           return (
                             <tr key={`row-${i}`}>
-                              <td className="text-capital">{`${e.name} ${e.surname}`}</td>
+                              <td className="text-capital">
+                                <Link
+                                  href={`/admpnl/adminfo?id=${e.id}`}
+                                >{`${e.name} ${e.surname}`}</Link>
+                              </td>
                               <td className="text-capital">{e.company_name}</td>
                               <td>{e.email}</td>
                               <td>{e.phone}</td>
+                              <td>
+                                {e.is_verified ? "Verified" : "Not Verified"}
+                              </td>
                               <td className="clearfix">
                                 <div className="float-end">
                                   <a

@@ -1,6 +1,6 @@
 from manager.models import *
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from manager.serializer import AccountSerializer, TransactionSerializer, WalletSerializer, VerificationSerializer, PersonalInfoSerializer
+from manager.serializer import AccountSerializer, TransactionSerializer, WalletSerializer, VerificationSerializer, PersonalInfoSerializer, FinancialInfoSerializer
 
 
 class UserAdminSerializer(ModelSerializer):
@@ -10,6 +10,7 @@ class UserAdminSerializer(ModelSerializer):
     wallet = SerializerMethodField()
     documents = SerializerMethodField()
     info = SerializerMethodField()
+    financial = SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -38,5 +39,12 @@ class UserAdminSerializer(ModelSerializer):
         i = PersonalInfo.objects.filter(user=instance).first()
         if (i):
             return PersonalInfoSerializer(i).data
+        else:
+            return None
+
+    def get_financial(self, instance):
+        f = FinancialInfo.objects.filter(user=instance).first()
+        if f:
+            return FinancialInfoSerializer(f).data
         else:
             return None

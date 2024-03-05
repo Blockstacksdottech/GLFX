@@ -119,7 +119,7 @@ export default function Support() {
                           splited[current] &&
                           splited[current].map((e, i) => {
                             return (
-                              <tr key={e.id} className="bg-white">
+                              <tr key={e.id} className="bg-white border-bottom">
                                 <td className="action">
                                   <a onClick={() => deleteTicket(e.id)}>
                                     <i className="bi bi-trash text-danger"></i>

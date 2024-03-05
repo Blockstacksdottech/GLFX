@@ -221,7 +221,7 @@ class VerificationView(APIView):
 
     def get(self, request, format=None):
         u = request.user
-        doc = VerificationDocuments.objects.first()
+        doc = VerificationDocuments.objects.filter(user=u).first()
         if doc:
             doc_s = VerificationSerializer(doc)
             return Response(doc_s.data, status=status.HTTP_200_OK)
@@ -240,8 +240,9 @@ class VerificationView(APIView):
                     "front": front, "back": back}
             if not u.is_verified:
 
-                if doc and all([country, docType, front, back]):
-                    doc.delete()
+                if all([country, docType, front, back]):
+                    if doc:
+                        doc.delete()
 
                     doc_s = VerificationSerializer(data=body)
                     if doc_s.is_valid():

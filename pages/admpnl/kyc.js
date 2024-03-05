@@ -58,7 +58,7 @@ export default function Accounts() {
                   <div className="pt-3 pb-2 mb-3 border-bottom">
                     <div className="clearfix">
                       <h1 className="h5 float-start">
-                        Personal Details & Documentation
+                        {/* Personal Details & */} Documents
                       </h1>
                     </div>
 
@@ -67,7 +67,7 @@ export default function Accounts() {
                         <div className="card mb-5">
                           <form>
                             <div className="card-body">
-                              <div className="row mb-3">
+                              {/* <div className="row mb-3">
                                 <div className="col-md-6">
                                   <label className="mb-2">First Name</label>
                                   <input
@@ -164,7 +164,7 @@ export default function Accounts() {
                                     readOnly={true}
                                   />
                                 </div>
-                              </div>
+                              </div> */}
                               {user.documents && (
                                 <>
                                   <div class="row">

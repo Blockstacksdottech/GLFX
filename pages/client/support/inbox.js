@@ -134,7 +134,10 @@ export default function Inbox() {
                           splited[current].map((e, i) => {
                             return (
                               !e.hidden_user && (
-                                <tr key={e.id} className="bg-white">
+                                <tr
+                                  key={e.id}
+                                  className="bg-white border-bottom"
+                                >
                                   <td className="action">
                                     <a onClick={() => deleteTicket(e.id)}>
                                       <i className="bi bi-trash text-danger"></i>

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { formatDate, formatDate2, postReq, req } from "@/helpers/helpers";
 import Navbar from "./component/navbar";
+import Link from "next/link";
 
 export default function Detailed() {
   const [ticket, setTicket] = useState();
@@ -95,10 +96,14 @@ export default function Detailed() {
                                 key={`message-${e.id}`}
                                 className="small px-2 py-1 text-dark text-wrap text-start my-2"
                               >
-                                <span className="h6">
-                                  {ticket.user.username} ({ticket.user.email}){" "}
-                                  <br />
-                                </span>
+                                <Link
+                                  href={`/admpnl/adminfo?id=${ticket.user.id}`}
+                                >
+                                  <span className="h6">
+                                    {ticket.user.username} ({ticket.user.email}){" "}
+                                    <br />
+                                  </span>
+                                </Link>
                                 {e.message}
                               </p>
                             );
