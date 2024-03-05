@@ -8,7 +8,7 @@ import { formatDate, formatDate2, postReq, req } from "@/helpers/helpers";
 import Navbar from "./component/navbar";
 import Link from "next/link";
 
-export default function Detailed() {
+export default function AdmDetailed() {
   const [ticket, setTicket] = useState();
   const [loading, setLoading] = useState();
   const params = useSearchParams();
@@ -32,9 +32,10 @@ export default function Detailed() {
   }, [params]);
 
   useEffect(() => {
+    console.log("Running this");
     const intervalId = setInterval(() => {
       fetchTicket();
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(intervalId); // Cleanup function
   }, []);

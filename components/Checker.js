@@ -3,6 +3,8 @@ import { isLogged, logout } from "@/helpers/helpers";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "@/styles/modular/Loader.module.css";
+import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 
 const Checker = ({ children, admin, register }) => {
   const [User, setUser] = useContext(UserContext);
@@ -27,6 +29,10 @@ const Checker = ({ children, admin, register }) => {
       obj.phone = resp.phone;
       obj.isBaned = resp.is_baned;
       obj.isVerified = resp.is_verified;
+      if (resp.is_baned) {
+        toast.error("You are banned");
+        logout(setUser);
+      }
       setUser(obj);
       return obj;
     } else {
@@ -61,7 +67,7 @@ const Checker = ({ children, admin, register }) => {
 
   return (
     <>
-      {loading && (
+      {/* {loading && (
         <div className={styles["full-container"]}>
           <div className={styles["lds-grid"]}>
             <div></div>
@@ -77,7 +83,10 @@ const Checker = ({ children, admin, register }) => {
         </div>
       )}
 
-      {!loading && <>{children}</>}
+      {!loading && <>{children}</>} */}
+      <LoadingOverlay active={loading} spinner text={`Loading...`}>
+        {children}
+      </LoadingOverlay>
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { formatDate, formatDate2, postReq, req } from "@/helpers/helpers";
+import LoadingOverlay from "react-loading-overlay";
 
 export default function Detailed() {
   const [ticket, setTicket] = useState();
@@ -33,7 +34,7 @@ export default function Detailed() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchTicket();
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(intervalId); // Cleanup function
   }, []);
@@ -53,97 +54,102 @@ export default function Detailed() {
         <title>GLFX - Support | Message Details</title>
       </Head>
       <Checker admin={false}>
-        {!loading && ticket && (
-          <>
-            <Navbar />
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-3 col-lg-2 p-0">
-                  <Sidebar />
-                </div>
-
-                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
-                  <div className="pt-3 pb-2 mb-3 border-bottom">
-                    <div className="clearfix">
-                      <div className="h5 float-start">
-                        <a href="/client/support/inbox/" className="text-dark">
-                          <i className="bi bi-arrow-left-circle"></i> Back to
-                          Inbox
-                        </a>
-                      </div>
-                    </div>
+        <LoadingOverlay active={loading} spinner text={`Loading...`}>
+          {!loading && ticket && (
+            <>
+              <Navbar />
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-md-3 col-lg-2 p-0">
+                    <Sidebar />
                   </div>
 
-                  <div className="card shadow-none mt-3 border border-light">
-                    <div className="card-body">
-                      <div className="media mb-3">
-                        <div className="media-body">
-                          <span className="media-meta float-end">
-                            {formatDate2(new Date(ticket.date))}
-                          </span>
-
-                          <small className="text-muted">
-                            From : {ticket.user.email}
-                          </small>
-                          <h5 className="my-3 text-primary m-0">
-                            {ticket.subject}
-                          </h5>
-                        </div>
-                      </div>
-
-                      <div className="chat-body">
-                        {ticket.messages.map((e, i) => {
-                          if (e.from_admin) {
-                            return (
-                              <p
-                                key={`message-${e.id}`}
-                                className="small px-2 py-1 text-dark text-wrap text-start my-2"
-                              >
-                                <span className="h6">
-                                  Support <br />
-                                </span>
-                                {e.message}
-                              </p>
-                            );
-                          } else {
-                            return (
-                              <p className="small px-2 py-1 text-secondary text-wrap text-end my-2">
-                                <span className="h6">
-                                  {ticket.user.username} ({ticket.user.email}){" "}
-                                  <br />
-                                </span>
-                                {e.message}
-                              </p>
-                            );
-                          }
-                        })}
-                      </div>
-                      <hr />
-                      <div className="media mt-3">
-                        <div className="media-body">
-                          <textarea
-                            className="form-control"
-                            rows="9"
-                            placeholder="Reply here..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                          ></textarea>
-                        </div>
-                      </div>
-                      <div className="clearfix mt-3">
-                        <div className="float-end">
-                          <a className="btn btn-primary" onClick={reply}>
-                            <i className="bi bi-send mr-1"></i> Send
+                  <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+                    <div className="pt-3 pb-2 mb-3 border-bottom">
+                      <div className="clearfix">
+                        <div className="h5 float-start">
+                          <a
+                            href="/client/support/inbox/"
+                            className="text-dark"
+                          >
+                            <i className="bi bi-arrow-left-circle"></i> Back to
+                            Inbox
                           </a>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </main>
+
+                    <div className="card shadow-none mt-3 border border-light">
+                      <div className="card-body">
+                        <div className="media mb-3">
+                          <div className="media-body">
+                            <span className="media-meta float-end">
+                              {formatDate2(new Date(ticket.date))}
+                            </span>
+
+                            <small className="text-muted">
+                              From : {ticket.user.email}
+                            </small>
+                            <h5 className="my-3 text-primary m-0">
+                              {ticket.subject}
+                            </h5>
+                          </div>
+                        </div>
+
+                        <div className="chat-body">
+                          {ticket.messages.map((e, i) => {
+                            if (e.from_admin) {
+                              return (
+                                <p
+                                  key={`message-${e.id}`}
+                                  className="small px-2 py-1 text-dark text-wrap text-start my-2"
+                                >
+                                  <span className="h6">
+                                    Support <br />
+                                  </span>
+                                  {e.message}
+                                </p>
+                              );
+                            } else {
+                              return (
+                                <p className="small px-2 py-1 text-secondary text-wrap text-end my-2">
+                                  <span className="h6">
+                                    {ticket.user.username} ({ticket.user.email}){" "}
+                                    <br />
+                                  </span>
+                                  {e.message}
+                                </p>
+                              );
+                            }
+                          })}
+                        </div>
+                        <hr />
+                        <div className="media mt-3">
+                          <div className="media-body">
+                            <textarea
+                              className="form-control"
+                              rows="9"
+                              placeholder="Reply here..."
+                              value={message}
+                              onChange={(e) => setMessage(e.target.value)}
+                            ></textarea>
+                          </div>
+                        </div>
+                        <div className="clearfix mt-3">
+                          <div className="float-end">
+                            <a className="btn btn-primary" onClick={reply}>
+                              <i className="bi bi-send mr-1"></i> Send
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </main>
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </LoadingOverlay>
       </Checker>
     </>
   );

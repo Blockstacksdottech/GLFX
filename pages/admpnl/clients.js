@@ -75,13 +75,22 @@ export default function Clients() {
                               <td className="text-capital">
                                 <Link
                                   href={`/admpnl/adminfo?id=${e.id}`}
+                                  className="text-dark"
                                 >{`${e.name} ${e.surname}`}</Link>
                               </td>
                               <td className="text-capital">{e.company_name}</td>
                               <td>{e.email}</td>
                               <td>{e.phone}</td>
                               <td>
-                                {e.is_verified ? "Verified" : "Not Verified"}
+                                {e.is_verified ? (
+                                  <span className="badge bg-success">
+                                    Verified
+                                  </span>
+                                ) : (
+                                  <span className="badge bg-danger">
+                                    Not Verified
+                                  </span>
+                                )}
                               </td>
                               <td className="clearfix">
                                 <div className="float-end">
@@ -99,7 +108,7 @@ export default function Clients() {
                                   </a>
                                   <a
                                     href={`/admpnl/kyc?id=${e.id}`}
-                                    className="btn btn-sm btn-dark me-2"
+                                    className="btn btn-sm btn-info me-2"
                                   >
                                     Documents
                                   </a>

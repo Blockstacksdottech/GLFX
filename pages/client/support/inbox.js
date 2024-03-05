@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import { deleteReq, formatDate2, postReq, req } from "@/helpers/helpers";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import LoadingOverlay from "react-loading-overlay";
 
 export default function Inbox() {
   const [User, setUser] = useContext(UserContext);
@@ -79,131 +81,133 @@ export default function Inbox() {
         <title>GLFX - Support | Inbox</title>
       </Head>
       <Checker admin={false}>
-        {!loading && (
-          <>
-            <Navbar />
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-3 col-lg-2 p-0">
-                  <Sidebar />
-                </div>
+        <LoadingOverlay active={loading} spinner text={`Loading...`}>
+          {!loading && (
+            <>
+              <Navbar />
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-md-3 col-lg-2 p-0">
+                    <Sidebar />
+                  </div>
 
-                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
-                  <div className="pt-3 pb-2 mb-3 border-bottom">
-                    <div className="clearfix">
-                      <h1 className="h5 float-start">Inbox</h1>
-                      <div className="float-end">
-                        <a
-                          className="btn btn-info"
-                          href="/client/support/newmessage/"
-                        >
-                          New Message
-                        </a>
+                  <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+                    <div className="pt-3 pb-2 mb-3 border-bottom">
+                      <div className="clearfix">
+                        <h1 className="h5 float-start">Inbox</h1>
+                        <div className="float-end">
+                          <a
+                            className="btn btn-info"
+                            href="/client/support/newmessage/"
+                          >
+                            New Message
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {splited.length === 0 && (
-                    <>
-                      <h1 className="text-center">Inbox Empty</h1>
-                    </>
-                  )}
-                  {splited.length > 0 && splited[current].length > 0 && (
-                    <div className="row">
-                      <div className="col-md-4 ms-auto">
-                        <form action="#">
-                          <div className="input-group flex-nowrap">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Search Mail"
-                            />
-                            <span className="input-group-text">
-                              <i className="bi bi-search"></i>
-                            </span>
-                          </div>
-                        </form>
+                    {splited.length === 0 && (
+                      <>
+                        <h1 className="text-center">Inbox Empty</h1>
+                      </>
+                    )}
+                    {splited.length > 0 && splited[current].length > 0 && (
+                      <div className="row">
+                        <div className="col-md-4 ms-auto">
+                          <form action="#">
+                            <div className="input-group flex-nowrap">
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Search Mail"
+                              />
+                              <span className="input-group-text">
+                                <i className="bi bi-search"></i>
+                              </span>
+                            </div>
+                          </form>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  <div className="table-responsive my-4">
-                    <table className="table table-borderless">
-                      <tbody>
-                        {splited &&
-                          splited[current] &&
-                          splited[current].map((e, i) => {
-                            return (
-                              !e.hidden_user && (
-                                <tr
-                                  key={e.id}
-                                  className="bg-white border-bottom"
-                                >
-                                  <td className="action">
-                                    <a onClick={() => deleteTicket(e.id)}>
-                                      <i className="bi bi-trash text-danger"></i>
-                                    </a>
-                                  </td>
-                                  <td className="subject">
-                                    <a
-                                      href={`/client/support/detailed?ticket=${e.id}`}
-                                      className="text-dark"
-                                    >
-                                      {e.subject}
-                                    </a>
-                                  </td>
-                                  <td className="time float-end">
-                                    {formatDate2(e.date)}
-                                  </td>
-                                </tr>
-                              )
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
-                  {splited.length > 0 && splited[current].length > 0 && (
-                    <div className="clearfix">
-                      <div className="float-end">
-                        <nav aria-label="Page navigation example">
-                          <ul className="pagination">
-                            <li className="page-item">
-                              <a
-                                className="page-link"
-                                onClick={() => handleStep(-1)}
-                              >
-                                Previous
-                              </a>
-                            </li>
-                            {splited.map((e, i) => {
+                    <div className="table-responsive my-4">
+                      <table className="table table-borderless">
+                        <tbody>
+                          {splited &&
+                            splited[current] &&
+                            splited[current].map((e, i) => {
                               return (
-                                <li className="page-item" key={`pag-${i}`}>
-                                  <a
-                                    className="page-link"
-                                    onClick={() => setCurrent(i)}
+                                !e.hidden_user && (
+                                  <tr
+                                    key={e.id}
+                                    className="bg-white border-bottom"
                                   >
-                                    {i + 1}
-                                  </a>
-                                </li>
+                                    <td className="action">
+                                      <a onClick={() => deleteTicket(e.id)}>
+                                        <i className="bi bi-trash text-danger"></i>
+                                      </a>
+                                    </td>
+                                    <td className="subject">
+                                      <Link
+                                        href={`/client/support/detailed?ticket=${e.id}`}
+                                        className="text-dark"
+                                      >
+                                        {e.subject}
+                                      </Link>
+                                    </td>
+                                    <td className="time float-end">
+                                      {formatDate2(e.date)}
+                                    </td>
+                                  </tr>
+                                )
                               );
                             })}
-                            <li className="page-item">
-                              <a
-                                className="page-link"
-                                onClick={() => handleStep(1)}
-                              >
-                                Next
-                              </a>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
+                        </tbody>
+                      </table>
                     </div>
-                  )}
-                </main>
+                    {splited.length > 0 && splited[current].length > 0 && (
+                      <div className="clearfix">
+                        <div className="float-end">
+                          <nav aria-label="Page navigation example">
+                            <ul className="pagination">
+                              <li className="page-item">
+                                <a
+                                  className="page-link"
+                                  onClick={() => handleStep(-1)}
+                                >
+                                  Previous
+                                </a>
+                              </li>
+                              {splited.map((e, i) => {
+                                return (
+                                  <li className="page-item" key={`pag-${i}`}>
+                                    <a
+                                      className="page-link"
+                                      onClick={() => setCurrent(i)}
+                                    >
+                                      {i + 1}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                              <li className="page-item">
+                                <a
+                                  className="page-link"
+                                  onClick={() => handleStep(1)}
+                                >
+                                  Next
+                                </a>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      </div>
+                    )}
+                  </main>
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </LoadingOverlay>
       </Checker>
     </>
   );

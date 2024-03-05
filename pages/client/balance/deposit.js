@@ -12,6 +12,7 @@ import {
   req,
 } from "@/helpers/helpers";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
 
 export default function Deposit() {
   const [User, setUser] = useContext(UserContext);
@@ -109,259 +110,269 @@ export default function Deposit() {
       <Head>
         <title>GLFX - Balance | Deposit</title>
       </Head>
-      {!loading && wallet && (
-        <Checker admin={false}>
-          <>
-            <Navbar />
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-3 col-lg-2 p-0">
-                  <Sidebar />
-                </div>
-
-                <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
-                  <div className="pt-3 pb-2 mb-3 border-bottom">
-                    <div className="clearfix">
-                      <h1 className="h5 text-center">Deposit</h1>
-                    </div>
+      <LoadingOverlay active={loading} spinner text={`Loading...`}>
+        {!loading && wallet && (
+          <Checker admin={false}>
+            <>
+              <Navbar />
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-md-3 col-lg-2 p-0">
+                    <Sidebar />
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-12 m-auto">
-                      <div className="card">
-                        <div className="card-body">
-                          <form>
-                            <div className="mb-3">
-                              <div className="mb-2">
-                                <label>Account Type</label>
-                              </div>
-                              <div className="form-check form-check-inline">
-                                <input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="inlineRadioOptions"
-                                  id="inlineRadio1"
-                                  checked={choice === "account" ? true : false}
-                                  value={choice === "account" ? true : false}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setChoice("account");
+                  <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-grey">
+                    <div className="pt-3 pb-2 mb-3 border-bottom">
+                      <div className="clearfix">
+                        <h1 className="h5 text-center">Deposit</h1>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md-12 m-auto">
+                        <div className="card">
+                          <div className="card-body">
+                            <form>
+                              <div className="mb-3">
+                                <div className="mb-2">
+                                  <label>Account Type</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="inlineRadioOptions"
+                                    id="inlineRadio1"
+                                    checked={
+                                      choice === "account" ? true : false
                                     }
-                                  }}
-                                />
-                                <label className="form-check-label">
-                                  Account
-                                </label>
+                                    value={choice === "account" ? true : false}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setChoice("account");
+                                      }
+                                    }}
+                                  />
+                                  <label className="form-check-label">
+                                    Account
+                                  </label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="inlineRadioOptions"
+                                    id="inlineRadio1"
+                                    checked={choice === "wallet" ? true : false}
+                                    value={choice === "wallet" ? true : false}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setChoice("wallet");
+                                      }
+                                    }}
+                                  />
+                                  <label className="form-check-label">
+                                    Wallet
+                                  </label>
+                                </div>
                               </div>
-                              <div className="form-check form-check-inline">
-                                <input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="inlineRadioOptions"
-                                  id="inlineRadio1"
-                                  checked={choice === "wallet" ? true : false}
-                                  value={choice === "wallet" ? true : false}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setChoice("wallet");
-                                    }
-                                  }}
-                                />
-                                <label className="form-check-label">
-                                  Wallet
-                                </label>
-                              </div>
-                            </div>
-                            <div className="mb-">
-                              <label className="mb-2">
-                                Choose your{" "}
-                                {choice === "account" ? "Account" : "Wallet"}
-                              </label>
-                              <select
-                                className="form-select"
-                                name="acc"
-                                onChange={handleSelectChange}
-                                value={
-                                  choice === "wallet" && selectedAccount
-                                    ? selectedAccount.wallet_id
-                                    : ""
-                                }
-                              >
-                                <option>
+                              <div className="mb-">
+                                <label className="mb-2">
                                   Choose your{" "}
                                   {choice === "account" ? "Account" : "Wallet"}
-                                </option>
-                                {choice === "account" && <>{}</>}
-                                {choice === "wallet" && (
-                                  <>
-                                    <option value={`${wallet.wallet_id}`}>
-                                      Wallet : {wallet.wallet_id}
-                                    </option>
-                                  </>
-                                )}
-                              </select>
-                            </div>
+                                </label>
+                                <select
+                                  className="form-select"
+                                  name="acc"
+                                  onChange={handleSelectChange}
+                                  value={
+                                    choice === "wallet" && selectedAccount
+                                      ? selectedAccount.wallet_id
+                                      : ""
+                                  }
+                                >
+                                  <option>
+                                    Choose your{" "}
+                                    {choice === "account"
+                                      ? "Account"
+                                      : "Wallet"}
+                                  </option>
+                                  {choice === "account" && <>{}</>}
+                                  {choice === "wallet" && (
+                                    <>
+                                      <option value={`${wallet.wallet_id}`}>
+                                        Wallet : {wallet.wallet_id}
+                                      </option>
+                                    </>
+                                  )}
+                                </select>
+                              </div>
 
-                            <div className="my-3 card">
-                              <div className="table-responsive">
-                                <table className="table table-borderless text-center">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">Balance</th>
-                                      {/* <th scope="col">Equity</th>
+                              <div className="my-3 card">
+                                <div className="table-responsive">
+                                  <table className="table table-borderless text-center">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">Balance</th>
+                                        {/* <th scope="col">Equity</th>
                                 <th scope="col">Free Margin</th>
                                 <th scope="col">Margin</th>
                                 <th scope="col">Margin-level</th>
                                 <th scope="col">Credit</th> */}
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>
-                                        {!selectedAccount && <>USD --</>}
-                                        {selectedAccount && (
-                                          <>
-                                            {choice === "wallet" &&
-                                              `USD ${selectedAccount.amount}`}
-                                          </>
-                                        )}
-                                      </td>
-                                      {/* <td>USD 539.60</td>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                          {!selectedAccount && <>USD --</>}
+                                          {selectedAccount && (
+                                            <>
+                                              {choice === "wallet" &&
+                                                `USD ${selectedAccount.amount}`}
+                                            </>
+                                          )}
+                                        </td>
+                                        {/* <td>USD 539.60</td>
                                 <td>USD 539.60</td>
                                 <td>USD 0.00</td>
                                 <td>0.00</td>
                                 <td>0.00</td> */}
-                                    </tr>
-                                  </tbody>
-                                </table>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="mb-3">
-                              <div className="mb-2">
-                                <label>Payment Method</label>
-                              </div>
-                              <div class="row">
-                                <div class="col-md-4 mb-2">
-                                  <div className="form-check">
-                                    {/* <input
+                              <div className="mb-3">
+                                <div className="mb-2">
+                                  <label>Payment Method</label>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-4 mb-2">
+                                    <div className="form-check">
+                                      {/* <input
                                       className="form-check-input form-check-trader"
                                       type="radio"
                                       name="inlineRadioOptions"
                                       id="inlineRadio2"
                                       checked={true}
                                     /> */}
-                                    <img
-                                      className="form-check-label img-fluid"
-                                      src="../../assets/img/localdeposit.jpg"
-                                    />
+                                      <img
+                                        className="form-check-label img-fluid"
+                                        src="../../assets/img/localdeposit.jpg"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <label className="mb-2">Amount</label>
-                            <div class="input-group">
-                              <span class="input-group-text">USD</span>
-                              <input
-                                type="text"
-                                class="form-control"
-                                placeholder="Amount"
-                                value={amount}
-                                onChange={handleAmount}
-                              />
-                            </div>
-                            <div class="clearfix">
-                              <div class="float-end">
-                                <div className="form-text">
-                                  Min amount:{" "}
-                                  <span className="badge text-bg-dark">
-                                    USD 10
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            {choice === "wallet" && (
-                              <div class="mb-3">
-                                <label class="form-label">Receipt Photo</label>
+                              <label className="mb-2">Amount</label>
+                              <div class="input-group">
+                                <span class="input-group-text">USD</span>
                                 <input
+                                  type="text"
                                   class="form-control"
-                                  type="file"
-                                  id="formFile"
-                                  accept="image/*"
-                                  onChange={handleFileChange}
+                                  placeholder="Amount"
+                                  value={amount}
+                                  onChange={handleAmount}
                                 />
                               </div>
-                            )}
+                              <div class="clearfix">
+                                <div class="float-end">
+                                  <div className="form-text">
+                                    Min amount:{" "}
+                                    <span className="badge text-bg-dark">
+                                      USD 10
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              {choice === "wallet" && (
+                                <div class="mb-3">
+                                  <label class="form-label">
+                                    Receipt Photo
+                                  </label>
+                                  <input
+                                    class="form-control"
+                                    type="file"
+                                    id="formFile"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                  />
+                                </div>
+                              )}
 
-                            <div className="clearfix">
-                              <a
-                                className="btn btn-primary float-end"
-                                onClick={save}
-                              >
-                                Deposit Now
-                              </a>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row my-3">
-                    <div className="col-md-12">
-                      <div className="card">
-                        <div class="card-header">
-                          <h6>Transactions</h6>
-                        </div>
-                        <div className="card-body">
-                          <div className="table-responsive">
-                            <table className="table table-borderless">
-                              <thead>
-                                <tr>
-                                  <th scope="col">Transaction ID</th>
-                                  <th scope="col">Date</th>
-                                  <th scope="col">Amount</th>
-                                  <th scope="col">Action</th>
-                                  <th scope="col">Status</th>
-                                  <th scope="col">Type</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {transactions.map((e, i) => {
-                                  if (e.t_type === "deposit") {
-                                    return (
-                                      <tr key={`tr-${i}`}>
-                                        <td>#{e.id}</td>
-                                        <td>{formatDate(new Date(e.date))}</td>
-                                        <td>USD {e.amount}</td>
-                                        <td>{e.action}</td>
-                                        <td>
-                                          <a
-                                            className={`badge ${getBadgeClass(
-                                              e.status
-                                            )}`}
-                                          >
-                                            {e.status}
-                                          </a>
-                                        </td>
-                                        <td>{e.t_type}</td>
-                                      </tr>
-                                    );
-                                  }
-                                })}
-                              </tbody>
-                            </table>
+                              <div className="clearfix">
+                                <a
+                                  className="btn btn-primary float-end"
+                                  onClick={save}
+                                >
+                                  Deposit Now
+                                </a>
+                              </div>
+                            </form>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </main>
+                    <div className="row my-3">
+                      <div className="col-md-12">
+                        <div className="card">
+                          <div class="card-header">
+                            <h6>Transactions</h6>
+                          </div>
+                          <div className="card-body">
+                            <div className="table-responsive">
+                              <table className="table table-borderless">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Transaction ID</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Type</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {transactions.map((e, i) => {
+                                    if (e.t_type === "deposit") {
+                                      return (
+                                        <tr key={`tr-${i}`}>
+                                          <td>#{e.id}</td>
+                                          <td>
+                                            {formatDate(new Date(e.date))}
+                                          </td>
+                                          <td>USD {e.amount}</td>
+                                          <td>{e.action}</td>
+                                          <td>
+                                            <a
+                                              className={`badge ${getBadgeClass(
+                                                e.status
+                                              )}`}
+                                            >
+                                              {e.status}
+                                            </a>
+                                          </td>
+                                          <td>{e.t_type}</td>
+                                        </tr>
+                                      );
+                                    }
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </main>
+                </div>
               </div>
-            </div>
-          </>
-        </Checker>
-      )}
+            </>
+          </Checker>
+        )}
+      </LoadingOverlay>
     </>
   );
 }

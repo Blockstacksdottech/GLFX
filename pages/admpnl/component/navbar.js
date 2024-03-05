@@ -1,6 +1,7 @@
 import Checker from "@/components/Checker";
 import { UserContext } from "@/contexts/UserContext";
 import { logout } from "@/helpers/helpers";
+import Link from "next/link";
 import { useContext } from "react";
 
 export default function Navbar() {
@@ -33,13 +34,13 @@ export default function Navbar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link active"
                   aria-current="page"
                   href="/admpnl/clients"
                 >
                   Clients
-                </a>
+                </Link>
               </li>
               {/* <li className="nav-item">
 
@@ -59,7 +60,7 @@ export default function Navbar() {
           </div>
 
           <div class="d-flex">
-            <a
+            <Link
               className="btn btn-primary position-relative"
               href="/admpnl/support"
             >
@@ -67,7 +68,7 @@ export default function Navbar() {
               <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
                 <span class="visually-hidden">New alerts</span>
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>

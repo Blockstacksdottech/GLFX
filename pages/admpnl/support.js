@@ -5,6 +5,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { deleteReq, formatDate2, postReq, req } from "@/helpers/helpers";
 import { toast } from "react-toastify";
 import Navbar from "./component/navbar";
+import Link from "next/link";
 
 export default function Support() {
   const [User, setUser] = useContext(UserContext);
@@ -126,12 +127,12 @@ export default function Support() {
                                   </a>
                                 </td>
                                 <td className="subject">
-                                  <a
+                                  <Link
                                     href={`/admpnl/admdetailed?ticket=${e.id}`}
                                     className="text-dark"
                                   >
                                     {e.subject}
-                                  </a>
+                                  </Link>
                                 </td>
                                 <td className="time float-end">
                                   {formatDate2(e.date)}

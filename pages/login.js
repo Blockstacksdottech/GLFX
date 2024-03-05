@@ -1,6 +1,6 @@
 import Checker from "@/components/Checker";
 import { UserContext } from "@/contexts/UserContext";
-import { get_token, isLogged } from "@/helpers/helpers";
+import { get_token, isLogged, logout } from "@/helpers/helpers";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -29,7 +29,11 @@ export default function Login() {
       obj.phone = resp.phone;
       obj.isBaned = resp.is_baned;
       obj.isVerified = resp.is_verified;
-      setUser(obj);
+      if (resp.is_baned) {
+        logout(setUser);
+      } else {
+        setUser(obj);
+      }
     }
   }
 
@@ -78,7 +82,12 @@ export default function Login() {
         obj.phone = resp.phone;
         obj.isBaned = resp.is_baned;
         obj.isVerified = resp.is_verified;
-        setUser(obj);
+        if (resp.is_baned) {
+          toast.error("You are banned");
+        } else {
+          setUser(obj);
+        }
+
         /* if (resp.enable_login) {
           setUser(obj);
           toast.success("Logged in");
