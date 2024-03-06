@@ -226,7 +226,7 @@ export async function get_token(
   }
 }
 
-export async function registerCall(data) {
+export async function registerCall(data, login_ = true) {
   console.log(data);
 
   let headers = set_header();
@@ -246,8 +246,12 @@ export async function registerCall(data) {
     if (d.failed) {
       return d;
     }
-    let nextresp = await get_token(data.username, data.password);
-    return nextresp;
+    if (login_) {
+      let nextresp = await get_token(data.username, data.password);
+      return nextresp;
+    } else {
+      return true;
+    }
   } else {
     return false;
   }

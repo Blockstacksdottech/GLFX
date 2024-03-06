@@ -33,18 +33,20 @@ export default function Createdemoaccount() {
 
   const createAccount = async () => {
     if (checked) {
-      console.log("creating account");
-      console.log(User);
-      const data = {
-        user: User.id,
-        ...body,
-      };
-      const resp = await postReq("accounts/", data);
-      if (resp) {
-        toast.success("Account Created Successfully");
-        router.push("/client/myaccount/demoaccount");
+      if (body.balance === 0) {
+        toast.warning("Balance should be greater than 0");
       } else {
-        toast.error("Failed Creating Account");
+        const data = {
+          user: User.id,
+          ...body,
+        };
+        const resp = await postReq("accounts/", data);
+        if (resp) {
+          toast.success("Account Created Successfully");
+          router.push("/client/myaccount/demoaccount");
+        } else {
+          toast.error("Failed Creating Account");
+        }
       }
     } else {
       toast.warning("Agree to terms and conditions");

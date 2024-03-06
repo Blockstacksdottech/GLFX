@@ -165,6 +165,11 @@ export default function Accounts() {
                                   />
                                 </div>
                               </div> */}
+                              {!user.document && (
+                                <h1 className="text-center">
+                                  No documents found
+                                </h1>
+                              )}
                               {user.documents && (
                                 <>
                                   <div class="row">

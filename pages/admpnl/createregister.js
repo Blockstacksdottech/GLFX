@@ -1,65 +1,174 @@
 import Head from "next/head";
 import Navbar from "./component/navbar";
 import { useEffect, useState } from "react";
-import { formatImage, postReq, req } from "@/helpers/helpers";
+import { formatImage, postReq, registerCall, req } from "@/helpers/helpers";
 import Checker from "@/components/Checker";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { RegsiterValidator } from "@/helpers/validators";
+import { useRouter } from "next/router";
 
 export default function AdmInfo() {
-  const [user, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const params = useSearchParams();
+  const router = useRouter();
 
-  const fetchUser = async (id) => {
-    const resp = await req(`admin/admusers/${id}`);
-    if (resp) {
-      console.log(resp);
-      setUsers(resp);
-      setLoading(false);
+  const registerMethod = async (e) => {
+    e.preventDefault();
+    let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let confirm = document.getElementById("confirm").value;
+    let phone = document.getElementById("phone").value;
+    let name = document.getElementById("name").value;
+    let surname = document.getElementById("surname").value;
+    let company_name = document.getElementById("company_name").value;
+
+    if (confirm !== password) {
+      toast.warning("Password missmatch");
     } else {
-      toast.error("Failed fetching users");
-    }
-  };
-  const handleUser = async (id, action) => {
-    const body = {
-      id,
-      action,
-    };
-    const resp = await postReq("admin/banuser", body);
-    if (resp) {
-      toast.success(`User ${action === "approve" ? "Approved" : "Declined"}`);
-      fetchUser(user.id);
-    } else {
-      toast.error("Failed");
+      let data = {
+        username,
+        email,
+        password,
+        name,
+        surname,
+        phone,
+        company_name,
+      };
+
+      const parsed = RegsiterValidator.safeParse(data);
+      if (parsed.success) {
+        let resp = await registerCall(data, false);
+        if (resp) {
+          if (resp.failed) {
+            for (let err of resp.result) {
+              toast.error("failed creating user : " + err);
+            }
+          } else {
+            toast.success("User Created");
+            router.push("/admpnl/clients");
+          }
+        } else {
+          console.log(resp);
+          toast.error("failed Creating user");
+        }
+      } else {
+        for (const err of parsed.error.issues) {
+          toast.error(`${err.path[0]} : ${err.message}`);
+        }
+      }
     }
   };
 
-  const capitalize = (word) => {
-    return word ? word.charAt(0).toUpperCase() + word.slice(1) : "";
-  };
-
-  useEffect(() => {
-    const idd = params.get("id");
-    console.log(`Params are`);
-    console.log(idd);
-    if (idd) {
-      fetchUser(idd).then(() => console.log("fetched users"));
-    }
-  }, [params]);
   return (
     <>
       <Head>
         <title>GLFX - My Account | List of Accounts</title>
       </Head>
       <Checker admin={true}>
-        {!loading && (
+        {
           <>
             <Navbar />
             <div className="container-fluid">
               <div className="row">
-                <main className="col-md-12 ms-sm-auto px-md-5 bg-grey">
-                  <div className="pt-3 pb-2 mb-3 border-bottom">
+                <main className="d-flex align-items-center my-5 justify-content-center">
+                  <form
+                    method="post"
+                    action="/client/myaccount/liveaccount"
+                    autoComplete="off"
+                    autoFocus="off"
+                    className="form-signin w-100 m-auto"
+                  >
+                    <div className="text-center">
+                      <img
+                        className="mb-4"
+                        src="../assets/brand/logo.png"
+                        alt="GLFX"
+                      />
+                      <h1 className="mb-3">Create User</h1>
+                    </div>
+
+                    <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="First Name"
+                        id="name"
+                      />
+                      <label>First Name</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Last Name"
+                        id="surname"
+                      />
+                      <label>Last Name</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Username"
+                        id="username"
+                      />
+                      <label>Username</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Company Name"
+                        id="company_name"
+                      />
+                      <label>Company Name</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder="name@example.com"
+                        id="email"
+                      />
+                      <label>Email address</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Phone"
+                        id="phone"
+                      />
+                      <label>Phone</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="password"
+                        className="form-control"
+                        placeholder="Password"
+                        id="password"
+                      />
+                      <label>Password</label>
+                    </div>
+                    <div className="form-floating mb-2">
+                      <input
+                        type="password"
+                        className="form-control"
+                        placeholder="Confirm Password"
+                        id="confirm"
+                      />
+                      <label>Confirm Password</label>
+                    </div>
+
+                    <button
+                      className="btn btn-primary w-100 py-2"
+                      onClick={registerMethod}
+                    >
+                      Register
+                    </button>
+                  </form>
+
+                  {/* <div className="pt-3 pb-2 mb-3 border-bottom">
                     <div className="clearfix">
                       <h1 className="h5 float-start">
                         Personal Details & Financial Information
@@ -115,7 +224,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.birthday}
+                                    value={user.info.birthday}
                                     readOnly={true}
                                   />
                                 </div>
@@ -126,7 +235,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.address}
+                                    value={user.info.address}
                                     readOnly={true}
                                   />
                                 </div>
@@ -135,7 +244,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.address2}
+                                    value={user.info.address2}
                                     readOnly={true}
                                   />
                                 </div>
@@ -146,7 +255,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.city}
+                                    value={user.info.city}
                                     readOnly={true}
                                   />
                                 </div>
@@ -155,7 +264,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.state}
+                                    value={user.info.state}
                                     readOnly={true}
                                   />
                                 </div>
@@ -164,7 +273,7 @@ export default function AdmInfo() {
                                   <input
                                     type="text"
                                     className="form-control"
-                                    value={user.info?.country}
+                                    value={user.info.country}
                                     readOnly={true}
                                   />
                                 </div>
@@ -183,7 +292,7 @@ export default function AdmInfo() {
                                   <select
                                     className="form-select"
                                     name="net_worth"
-                                    value={user.financial?.net_worth}
+                                    value={user.financial.net_worth}
                                     readOnly={true}
                                   >
                                     <option></option>
@@ -211,7 +320,7 @@ export default function AdmInfo() {
                                   <select
                                     className="form-select"
                                     name="annual_income"
-                                    value={user.financial?.annual_income}
+                                    value={user.financial.annual_income}
                                     readOnly={true}
                                   >
                                     <option></option>
@@ -241,7 +350,7 @@ export default function AdmInfo() {
                                   <select
                                     className="form-select"
                                     name="employment_status"
-                                    value={user.financial?.employment_status}
+                                    value={user.financial.employment_status}
                                     readOnly={true}
                                   >
                                     <option></option>
@@ -263,7 +372,7 @@ export default function AdmInfo() {
                                   <select
                                     className="form-select"
                                     name="sources"
-                                    value={user.financial?.sources}
+                                    value={user.financial.sources}
                                     readOnly={true}
                                   >
                                     <option></option>
@@ -290,7 +399,7 @@ export default function AdmInfo() {
                                     className="form-select"
                                     name="instruments"
                                     value={capitalize(
-                                      user.financial?.instruments.toString()
+                                      user.financial.instruments.toString()
                                     )}
                                     readOnly={true}
                                   >
@@ -312,7 +421,7 @@ export default function AdmInfo() {
                                   className="form-select"
                                   name="assessment1"
                                   value={capitalize(
-                                    user.financial?.assessment1.toString()
+                                    user.financial.assessment1.toString()
                                   )}
                                   readOnly={true}
                                 >
@@ -331,7 +440,7 @@ export default function AdmInfo() {
                                   className="form-select"
                                   name="assessment2"
                                   value={capitalize(
-                                    user.financial?.assessment2.toString()
+                                    user.financial.assessment2.toString()
                                   )}
                                   readOnly={true}
                                 >
@@ -348,7 +457,7 @@ export default function AdmInfo() {
                                 <select
                                   className="form-select"
                                   name="initial_investment"
-                                  value={user.financial?.initial_investment}
+                                  value={user.financial.initial_investment}
                                   readOnly={true}
                                 >
                                   <option value="Less than $5000">
@@ -368,25 +477,18 @@ export default function AdmInfo() {
                                   </option>
                                 </select>
                               </div>
-                              {/* <div className="clearfix">
-                                <a
-                                  className="btn btn-primary float-end"
-                                  onClick={update}
-                                >
-                                  Save
-                                </a>
-                              </div> */}
+                              
                             </form>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </main>
               </div>
             </div>
           </>
-        )}
+        }
       </Checker>
     </>
   );

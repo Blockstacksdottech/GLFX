@@ -54,6 +54,14 @@ export default function Clients() {
                   <div className="pt-3 pb-2 mb-3 border-bottom">
                     <div className="clearfix">
                       <h1 className="h5 float-start">Clients</h1>
+                      <div className="float-end">
+                        <a
+                          className="btn btn-info"
+                          href="/admpnl/createregister/"
+                        >
+                          Create Client
+                        </a>
+                      </div>
                     </div>
                   </div>
                   <div className="table-responsive">
