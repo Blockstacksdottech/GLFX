@@ -6,7 +6,7 @@ import styles from "@/styles/modular/Loader.module.css";
 import { toast } from "react-toastify";
 import LoadingOverlay from "react-loading-overlay";
 
-const Checker = ({ children, admin, register }) => {
+const Checker = ({ children, admin, register, verification, recover }) => {
   const [User, setUser] = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +29,7 @@ const Checker = ({ children, admin, register }) => {
       obj.phone = resp.phone;
       obj.isBaned = resp.is_baned;
       obj.isVerified = resp.is_verified;
+      obj.emailVerified = resp.email_verified;
       if (resp.is_baned) {
         toast.error("You are banned");
         logout(setUser);
@@ -48,18 +49,30 @@ const Checker = ({ children, admin, register }) => {
       if (res.logged) {
         console.log("logged in");
         console.log(res);
-        if (admin && !res.isA) {
-          router.push(res.path);
-        } else if (!admin && res.isA) {
-          router.push(res.path);
+        if (!res.emailVerified && !res.isA) {
+          router.push("/verification");
+        } else {
+          if (admin && !res.isA) {
+            router.push(res.path);
+          } else if (!admin && res.isA) {
+            router.push(res.path);
+          } else if (verification && res.emailVerified) {
+            console.log("here after verification");
+            router.push(res.path);
+          }
         }
+
         setLoading(false);
       } else {
         console.log("need login");
         if (register) {
           router.push("/register");
         } else {
-          router.push("/login");
+          if (recover) {
+            router.push("/forgotpassword");
+          } else {
+            router.push("/login");
+          }
         }
       }
     });

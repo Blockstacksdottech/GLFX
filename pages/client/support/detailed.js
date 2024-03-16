@@ -92,6 +92,7 @@ export default function Detailed() {
                             </small>
                             <h5 className="my-3 text-primary m-0">
                               {ticket.subject}
+                              {ticket.closed ? " (Resolved)" : ""}
                             </h5>
                           </div>
                         </div>
@@ -124,24 +125,28 @@ export default function Detailed() {
                           })}
                         </div>
                         <hr />
-                        <div className="media mt-3">
-                          <div className="media-body">
-                            <textarea
-                              className="form-control"
-                              rows="9"
-                              placeholder="Reply here..."
-                              value={message}
-                              onChange={(e) => setMessage(e.target.value)}
-                            ></textarea>
-                          </div>
-                        </div>
-                        <div className="clearfix mt-3">
-                          <div className="float-end">
-                            <a className="btn btn-primary" onClick={reply}>
-                              <i className="bi bi-send mr-1"></i> Send
-                            </a>
-                          </div>
-                        </div>
+                        {!ticket.closed && (
+                          <>
+                            <div className="media mt-3">
+                              <div className="media-body">
+                                <textarea
+                                  className="form-control"
+                                  rows="9"
+                                  placeholder="Reply here..."
+                                  value={message}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                ></textarea>
+                              </div>
+                            </div>
+                            <div className="clearfix mt-3">
+                              <div className="float-end">
+                                <a className="btn btn-primary" onClick={reply}>
+                                  <i className="bi bi-send mr-1"></i> Send
+                                </a>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </main>

@@ -23,6 +23,11 @@ urlpatterns = [
     path("financialinfo", FinancialInfoV.as_view(), name="financial_info"),
     path("security", SecurityUpdateV.as_view(), name="security_view"),
     path("verification", VerificationView.as_view(), name="verification_view"),
+    # verification / recover
+    path("recover", RecoverPassword.as_view(), name="recover_password"),
+    path("recoverupdate", RecoverUpdate.as_view(), name="recover_update"),
+    path("sendotp", SendOTP.as_view(), name="send_otp"),
+    path("confirmotp", ConfirmOTP.as_view(), name="confirm_otp"),
     # wallet endpoints
     path("wallet", WalletV.as_view(), name="wallet"),
     # Deposit / withdrawal endpoints

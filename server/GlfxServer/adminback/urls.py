@@ -13,6 +13,7 @@ router.register("admtickets", AdminSupportViewSet, basename="admin_tickets")
 urlpatterns = [
     path("admstatus", AdminStatus.as_view(), name="admin_status_view"),
     path("banuser", AdminHandleUser.as_view(), name="admin_handle_user"),
+    path("admtickclose", MarkTicketSolved.as_view(), name="admin_handle_ticket"),
     # viewSet router
     path("", include(router.urls))
 ]

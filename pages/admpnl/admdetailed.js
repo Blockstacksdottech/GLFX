@@ -49,6 +49,18 @@ export default function AdmDetailed() {
     }
   };
 
+  const markSolved = async () => {
+    const r = await postReq("admin/admtickclose", {
+      tid: ticket.id,
+    });
+    if (r) {
+      toast.success("Solved");
+      fetchTicket();
+    } else {
+      toast.error("Failed");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -78,13 +90,25 @@ export default function AdmDetailed() {
                         <div className="media-body">
                           <span className="media-meta float-end">
                             {formatDate2(new Date(ticket.date))}
+                            {!ticket.closed && (
+                              <>
+                                {" "}
+                                <a
+                                  className="btn btn-primary mx-2"
+                                  onClick={markSolved}
+                                >
+                                  Mark Solved
+                                </a>
+                              </>
+                            )}
                           </span>
 
                           <small className="text-muted">
                             From : {ticket.user.email}
                           </small>
                           <h5 className="my-3 text-primary m-0">
-                            {ticket.subject}
+                            {ticket.subject}{" "}
+                            {ticket.closed ? " (Resolved)" : ""}
                           </h5>
                         </div>
                       </div>
@@ -121,24 +145,28 @@ export default function AdmDetailed() {
                         })}
                       </div>
                       <hr />
-                      <div className="media mt-3">
-                        <div className="media-body">
-                          <textarea
-                            className="form-control"
-                            rows="9"
-                            placeholder="Reply here..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                          ></textarea>
-                        </div>
-                      </div>
-                      <div className="clearfix mt-3">
-                        <div className="float-end">
-                          <a className="btn btn-primary" onClick={reply}>
-                            <i className="bi bi-send mr-1"></i> Send
-                          </a>
-                        </div>
-                      </div>
+                      {!ticket.closed && (
+                        <>
+                          <div className="media mt-3">
+                            <div className="media-body">
+                              <textarea
+                                className="form-control"
+                                rows="9"
+                                placeholder="Reply here..."
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                              ></textarea>
+                            </div>
+                          </div>
+                          <div className="clearfix mt-3">
+                            <div className="float-end">
+                              <a className="btn btn-primary" onClick={reply}>
+                                <i className="bi bi-send mr-1"></i> Send
+                              </a>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </main>

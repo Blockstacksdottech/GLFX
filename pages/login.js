@@ -29,6 +29,7 @@ export default function Login() {
       obj.phone = resp.phone;
       obj.isBaned = resp.is_baned;
       obj.isVerified = resp.is_verified;
+      obj.emailVerified = resp.email_verified;
       if (resp.is_baned) {
         logout(setUser);
       } else {
@@ -82,6 +83,7 @@ export default function Login() {
         obj.phone = resp.phone;
         obj.isBaned = resp.is_baned;
         obj.isVerified = resp.is_verified;
+        obj.emailVerified = resp.email_verified;
         if (resp.is_baned) {
           toast.error("You are banned");
         } else {

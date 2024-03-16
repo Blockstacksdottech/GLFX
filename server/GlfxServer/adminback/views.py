@@ -6,6 +6,9 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from manager.models import *
 from manager.serializer import *
+from manager.emailHandler import *
+from manager.constants import *
+from manager.templates import *
 
 # Create your views here.
 
@@ -45,6 +48,13 @@ class AdminStatus(APIView):
                 tr.status = status_val
                 tr.done = True
                 tr.save()
+                r = send_email(TRANSACTION_SUBJECT, TRANSACTION_BODY.format(
+                    tr.user.username,
+                    tr.source,
+                    tr.t_type,
+                    tr.amount,
+                    tr.status
+                ), [tr.user.email])
                 return Response({"failed": False})
             else:
                 return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
@@ -90,3 +100,22 @@ class AdminSupportViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Ticket.objects.all()
+
+
+class MarkTicketSolved(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        data = request.data
+        tid = data.get("tid", False)
+        if tid:
+            t = Ticket.objects.filter(id=int(tid)).first()
+            print(t)
+            if t:
+                t.closed = True
+                t.save()
+                return Response({"failed": False})
+            else:
+                return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)

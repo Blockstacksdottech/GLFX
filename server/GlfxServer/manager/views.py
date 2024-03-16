@@ -8,6 +8,9 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from .models import *
 import uuid
+from .emailHandler import send_email
+from .templates import *
+from .constants import *
 
 
 # Create your views here.
@@ -61,6 +64,99 @@ class UserInfoV(APIView):
             return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class RecoverPassword(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        email = data.get("email", False)
+        if email:
+            u = CustomUser.objects.filter(email=email).first()
+            if u:
+                old_r = RecoverRequest.objects.filter(user=u).first()
+                if old_r:
+                    old_r.delete()
+                r_id = str(uuid.uuid4())
+                r = RecoverRequest.objects.create(user=u, req_id=r_id)
+                r.save()
+                res = send_email(RESET_SUBJECT, RESET_BODY.format(u.username,
+                                                                  URL + "forgotpassword?reqid="+r_id), [u.email])
+                if res:
+                    return Response({"failed": False}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecoverUpdate(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, format=None):
+        data = request.data
+        req_id = data.get("req_id", False)
+        new_pass = data.get("new_pass", False)
+        confirm_pass = data.get("confirm_pass", False)
+        if all([req_id, new_pass, confirm_pass]):
+            r = RecoverRequest.objects.filter(req_id=req_id).first()
+            if r:
+                user = r.user
+                if confirm_pass == new_pass:
+                    user.set_password(new_pass)
+                    user.save()
+                    print("updated user {0}".format(user.username))
+                    print("new password is " + new_pass)
+                    return Response({"failed": False})
+                else:
+                    return Response({"failed": True, "message": "Password missmatch"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"failed": True, "message": "No Request matching"}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({"failed": True}, status=status.HTTP_200_OK)
+
+
+class SendOTP(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        user = request.user
+        old_c = ConfirmationCode.objects.filter(user=user).first()
+        if old_c:
+            old_c.delete()
+        code_ = str(uuid.uuid4()).split("-")[0]
+        c = ConfirmationCode.objects.create(user=user, code=code_)
+        c.save()
+        res = send_email(CONFIRMATION_SUBJECT.format(
+            user.username), CONFIRMATION_BODY.format(user.username, code_), [user.email])
+        if res:
+            return Response({"failed": False})
+        else:
+            return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ConfirmOTP(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        user = request.user
+        data = request.data
+        code = data.get("code", False)
+        if code:
+            c = ConfirmationCode.objects.filter(user=user, code=code).first()
+            if c:
+                user.email_verified = True
+                user.save()
+                c.delete()
+                return Response({"failed": False})
+            else:
+                return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"failed": True}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class SecurityUpdateV(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -75,6 +171,7 @@ class SecurityUpdateV(APIView):
             if user.check_password(old_pass):
                 if confirm_pass == new_pass:
                     user.set_password(new_pass)
+                    user.save()
                     return Response({"failed": False})
                 else:
                     return Response({"failed": True, "message": "Password missmatch"}, status=status.HTTP_200_OK)
@@ -342,7 +439,7 @@ class SendReply(APIView):
         ticket_id = data.get("ticket", False)
         message = data.get("message", False)
         ticket = Ticket.objects.filter(id=int(ticket_id)).first()
-        if ticket and (ticket.user.id == user.id or user.is_superuser):
+        if ticket and (ticket.user.id == user.id or user.is_superuser) and not ticket.closed:
             m = MessagesSerializer(
                 data={"ticket": ticket.id, "message": message, "from_admin": user.is_superuser})
             if m.is_valid():

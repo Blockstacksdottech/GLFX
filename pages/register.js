@@ -32,6 +32,7 @@ export default function Register() {
       obj.phone = resp.phone;
       obj.isBaned = resp.is_baned;
       obj.isVerified = resp.is_verified;
+      obj.emailVerified = resp.email_verified;
       setUser(obj);
     }
   }
@@ -96,6 +97,7 @@ export default function Register() {
             obj.phone = resp.phone;
             obj.isBaned = resp.is_baned;
             obj.isVerified = resp.is_verified;
+            obj.emailVerified = resp.email_verified;
             setUser(obj);
             toast.success("Registered");
           }
