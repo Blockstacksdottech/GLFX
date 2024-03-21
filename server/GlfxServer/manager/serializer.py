@@ -17,6 +17,8 @@ from rest_framework import exceptions, serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
+from .emailHandler import send_email
+from .templates import *
 
 
 class PasswordField(serializers.CharField):
@@ -168,6 +170,20 @@ class AccountSerializer(ModelSerializer):
     class Meta:
         model = Account
         fields = "__all__"
+
+    def create(self, validated, *args, **kwargs):
+        print(validated)
+        acc = Account.objects.create(**validated)
+        acc.save()
+        # sending email
+        res = send_email(DEMO_SUBJECT, DEMO_BODY.format(
+            acc.user.username,
+            acc.acc_leverage,
+            acc.balance,
+            acc.master_pass,
+            acc.investor_pass
+        ), [acc.user.email])
+        return validated
 
 
 class TicketSerializer(ModelSerializer):

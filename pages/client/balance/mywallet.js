@@ -80,7 +80,7 @@ export default function Mywallet() {
                       </div>
                     </div>
                     <div className="row">
-                      <div className="col-lg-6 mb-2">
+                      <div className="col-lg-12 mb-2">
                         <div className="card bg-blue">
                           <div className="card-body">
                             <div className="row">
@@ -102,7 +102,7 @@ export default function Mywallet() {
                         </div>
                       </div>
 
-                      <div className="col-lg-6 mb-2">
+                      {/* <div className="col-lg-6 mb-2">
                         <div className="card bg-navy-blue">
                           <div className="card-body">
                             <div className="row">
@@ -122,7 +122,7 @@ export default function Mywallet() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 
                     <div className="row my-3">

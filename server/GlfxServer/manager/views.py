@@ -244,7 +244,7 @@ class WalletV(APIView):
         wallet = Wallet.objects.filter(user=user).first()
         if not wallet:
             wallet = Wallet.objects.create(
-                user=user, wallet_id=str(uuid.uuid4()))
+                user=user, wallet_id=user.username+"-" + str(uuid.uuid4()).split("-")[0])
             wallet.save()
         wallet_s = WalletSerializer(wallet)
         return Response(wallet_s.data, status=status.HTTP_200_OK)

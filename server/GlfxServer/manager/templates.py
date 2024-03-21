@@ -46,3 +46,15 @@ has been updated to {4}.
 Sincerely,
 The GLFX Team
 """
+
+
+DEMO_SUBJECT = "Demo Account Details"
+
+DEMO_BODY = """
+Hi {0},
+Your demo account details
+Leverage : {1}
+Balance  : {2}
+Master Password : {3}
+Investor Password : {4}
+"""

@@ -16,7 +16,7 @@ export default function Navbar() {
         </a>
 
         <ul className="navbar-nav flex-row me-4">
-          <li className="nav-item me-2">
+          {/* <li className="nav-item me-2">
             <a className="nav-link">
               <i className="bi bi-shield-fill-check text-green me-1"></i>
               <small>Mobile Verified</small>
@@ -27,24 +27,27 @@ export default function Navbar() {
               <i className="bi bi-shield-fill-check text-green me-1"></i>
               <small>Email Verified</small>
             </a>
-          </li>
-          <li className="nav-item me-2">
-            <a className="nav-link" href="/client/myprofile/documentation/">
-              {!User.isVerified && (
-                <>
-                  <i className="bi bi-shield-fill-x text-red me-1"></i>
-                  <small>Document not Verified</small>
-                </>
-              )}
+          </li> */}
+          {!User.isVerified && (
+            <li className="nav-item me-2">
+              <a className="nav-link" href="/client/myprofile/documentation/">
+                {!User.isVerified && (
+                  <>
+                    <i className="bi bi-shield-fill-x text-red me-1"></i>
+                    <small>Document not Verified</small>
+                  </>
+                )}
 
-              {User.isVerified && (
-                <>
-                  <i className="bi bi-shield-fill-check text-green me-1"></i>
-                  <small>Document Verified</small>
-                </>
-              )}
-            </a>
-          </li>
+                {User.isVerified && (
+                  <>
+                    <i className="bi bi-shield-fill-check text-green me-1"></i>
+                    <small>Document Verified</small>
+                  </>
+                )}
+              </a>
+            </li>
+          )}
+
           <li className="nav-item d-md-none">
             <button
               className="nav-link px-3 text-dark"
