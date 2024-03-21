@@ -116,6 +116,7 @@ class Transaction(models.Model):
         default="", max_length=255)  # Deposit | Withdrawal
     source = models.CharField(default="", max_length=255)
     source_id = models.IntegerField(default=0)
+    method = models.CharField(default="bank", max_length=255)
     comment = models.CharField(default="", max_length=255, blank=True)
     done = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)

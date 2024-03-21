@@ -256,6 +256,7 @@ class TransactionCreateAPIView(APIView):
         source_id = request.data.get('source_id')
         action = request.data.get('action')
         amount = request.data.get('amount')
+        method = request.data.get("method")
         print(request.data)
         image_file = request.data.get('image')
         comment = request.data.get("description", "")
@@ -266,7 +267,8 @@ class TransactionCreateAPIView(APIView):
 
         # Create transaction
         transaction_data = {'user': request.user.id,
-                            'amount': amount, 't_type': action, "comment": comment}
+                            'amount': amount, 't_type': action, "comment": comment, "method": method}
+        print(transaction_data)
         if source == 'wallet':
             transaction_data["source"] = source
             transaction_data["source_id"] = source_id

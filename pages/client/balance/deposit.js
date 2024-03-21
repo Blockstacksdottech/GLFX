@@ -20,6 +20,7 @@ export default function Deposit() {
   const [wallet, setWallet] = useState(true);
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [method, setMethod] = useState("bank");
 
   // usage state
   const [choice, setChoice] = useState("account");
@@ -92,6 +93,7 @@ export default function Deposit() {
       const body = {
         source_id: selectedAccount.id,
         source: choice,
+        method,
         action: "deposit",
         amount,
       };
@@ -250,17 +252,40 @@ export default function Deposit() {
                                 <div class="row">
                                   <div class="col-md-4 mb-2">
                                     <div className="form-check">
-                                      {/* <input
-                                      className="form-check-input form-check-trader"
-                                      type="radio"
-                                      name="inlineRadioOptions"
-                                      id="inlineRadio2"
-                                      checked={true}
-                                    /> */}
-                                      <img
-                                        className="form-check-label img-fluid"
-                                        src="../../assets/img/localdeposit.jpg"
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="withdrawOtpion"
+                                        id="inlineRadio2"
+                                        checked={
+                                          method === "local" ? true : false
+                                        }
+                                        onChange={(e) => {
+                                          setMethod("local");
+                                        }}
                                       />
+                                      <label for="inlineRadio2">
+                                        Local Withdraw
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4 mb-2">
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="withdrawOtpion"
+                                        id="inlineRadio2"
+                                        checked={
+                                          method === "bank" ? true : false
+                                        }
+                                        onChange={(e) => {
+                                          setMethod("bank");
+                                        }}
+                                      />
+                                      <label for="inlineRadio2">
+                                        Bank Transfer
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
