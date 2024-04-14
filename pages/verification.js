@@ -46,7 +46,7 @@ export default function Verification() {
             action="/client/myprofile/documentation/"
             autoComplete="off"
             autoFocus="off"
-            className="form-signin w-100 m-auto"
+            className=" m-auto"
           >
             <div className="text-center mb-3">
               <img className="mb-4" src="../assets/brand/logo.png" alt="GLFX" />
@@ -54,7 +54,6 @@ export default function Verification() {
             </div>
 
             <div className="card my-3">
-              <div className="card-header">Email Address</div>
               <div className="card-body">
                 {/* <div className="mb-3">
                   <div className="input-group">
@@ -73,7 +72,9 @@ export default function Verification() {
                   </div>
                 </div> */}
                 <div className="mb-3">
-                  <label>OTP</label>
+                  <p className="pb-3">
+                    Enter OTP received in your Email - email@email.com
+                  </p>
                   <div className="input-group">
                     <input
                       type="text"

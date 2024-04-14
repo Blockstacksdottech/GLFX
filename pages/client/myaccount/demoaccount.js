@@ -91,15 +91,13 @@ export default function Demoaccount() {
                                 <div className="col">
                                   <p className="small">
                                     #{e.id}{" "}
-                                    <span className="badge bg-success">
-                                      Live
-                                    </span>
+                                    <span className="badge bg-info">Demo</span>
                                   </p>
                                   <p className="small">
-                                    Standard MT5 -{" "}
+                                    Standard MT5
                                     {e.islamic && (
                                       <span className="badge bg-light text-dark">
-                                        Islamic
+                                        - Islamic
                                       </span>
                                     )}
                                   </p>
@@ -121,7 +119,10 @@ export default function Demoaccount() {
                               >
                                 Delete
                               </a>
-                              <a className="btn btn-sm btn-dark me-2 float-end">
+                              <a
+                                className="btn btn-sm btn-dark me-2 float-end"
+                                href="/client/myaccount/trade/"
+                              >
                                 Trade
                               </a>
                               <a

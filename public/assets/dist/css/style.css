@@ -285,8 +285,8 @@ p {
 }
 
 .not-verified::after {
-  width:200px;
-  height:150px;
+  width: 200px;
+  height: 150px;
   content: "";
   background: url(/assets/img/not-verified.png) no-repeat;
   opacity: 0.5;
@@ -299,8 +299,8 @@ p {
 }
 
 .rejected::after {
-  width:200px;
-  height:150px;
+  width: 200px;
+  height: 150px;
   content: "";
   background: url(/assets/img/rejected.png) no-repeat;
   opacity: 0.5;
@@ -313,8 +313,8 @@ p {
 }
 
 .under-process::after {
-  width:200px;
-  height:150px;
+  width: 200px;
+  height: 150px;
   content: "";
   background: url(/assets/img/under-process.png) no-repeat;
   opacity: 0.4;
@@ -327,8 +327,8 @@ p {
 }
 
 .approved::after {
-  width:200px;
-  height:150px;
+  width: 200px;
+  height: 150px;
   content: "";
   background: url(/assets/img/approved.png) no-repeat;
   opacity: 0.5;
@@ -338,4 +338,14 @@ p {
   right: 0;
   position: absolute;
   z-index: 1;
+}
+
+.input-group-text {
+  background-color: transparent;
+  font-size: 0.8rem;
+}
+
+.form-control-border {
+  border-left: 0 !important;
+  border-right: 0 !important;
 }
